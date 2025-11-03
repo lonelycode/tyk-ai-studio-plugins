@@ -1,0 +1,108 @@
+name: Generate Plugin Index
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'plugins/**/manifest.yaml'
+  workflow_dispatch:
+
+jobs:
+  generate-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Generate index.yaml
+        run: |
+          python3 << 'EOF'
+          import yaml
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          # Initialize index structure
+          index = {
+              'apiVersion': 'v1',
+              'generated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'plugins': {}
+          }
+
+          # Find all manifest.yaml files
+          plugins_dir = Path('plugins')
+          for manifest_path in plugins_dir.glob('*/manifest.yaml'):
+              with open(manifest_path, 'r') as f:
+                  manifest = yaml.safe_load(f)
+
+              plugin_id = manifest.get('id')
+              if not plugin_id:
+                  print(f"Warning: {manifest_path} missing 'id' field")
+                  continue
+
+              # Create indexed plugin entry
+              indexed_plugin = {
+                  'id': plugin_id,
+                  'name': manifest.get('name', ''),
+                  'version': manifest.get('version', ''),
+                  'description': manifest.get('description', ''),
+                  'oci_registry': manifest.get('oci', {}).get('registry', ''),
+                  'oci_repository': manifest.get('oci', {}).get('repository', ''),
+                  'oci_tag': manifest.get('oci', {}).get('tag', ''),
+                  'oci_digest': manifest.get('oci', {}).get('digest', ''),
+                  'oci_platform': manifest.get('oci', {}).get('platform', []),
+                  'category': manifest.get('category', ''),
+                  'maturity': manifest.get('maturity', ''),
+                  'publisher': manifest.get('publisher', ''),
+                  'icon': manifest.get('icon', ''),
+                  'primary_hook': manifest.get('capabilities', {}).get('primary_hook', ''),
+                  'min_studio_version': manifest.get('requirements', {}).get('min_studio_version', ''),
+                  'created_at': manifest.get('created_at', ''),
+                  'updated_at': manifest.get('updated_at', ''),
+                  'deprecated': manifest.get('deprecated', False),
+                  'manifest_url': f"https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/{manifest_path}"
+              }
+
+              # Group by plugin ID, supporting multiple versions
+              if plugin_id not in index['plugins']:
+                  index['plugins'][plugin_id] = []
+
+              index['plugins'][plugin_id].append(indexed_plugin)
+
+          # Sort versions for each plugin (newest first)
+          for plugin_id in index['plugins']:
+              index['plugins'][plugin_id].sort(
+                  key=lambda x: x.get('updated_at', ''),
+                  reverse=True
+              )
+
+          # Write index.yaml
+          with open('index.yaml', 'w') as f:
+              yaml.dump(index, f, default_flow_style=False, sort_keys=False)
+
+          print(f"Generated index.yaml with {len(index['plugins'])} plugins")
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add index.yaml
+          if git diff --staged --quiet; then
+            echo "No changes to index.yaml"
+          else
+            git commit -m "Auto-generate index.yaml from plugin manifests"
+            git push
+          fi

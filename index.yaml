@@ -1,0 +1,23 @@
+apiVersion: v1
+generated: "2025-11-04T10:00:00Z"
+plugins:
+  echo-agent:
+    - id: "com.tyk.echo-agent"
+      name: "Echo Agent"
+      version: "0.1.0"
+      description: "A simple test agent that wraps LLM responses with custom prefix and suffix markers. Useful for testing and development."
+      oci_registry: "ghcr.io"
+      oci_repository: "tyk-technologies/plugins/echo-agent"
+      oci_tag: "0.1.0"
+      oci_digest: "sha256:placeholder-will-be-updated-after-build"
+      oci_platform: ["linux/amd64", "linux/arm64", "darwin/amd64", "darwin/arm64"]
+      category: "agents"
+      maturity: "stable"
+      publisher: "tyk-official"
+      icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.png"
+      primary_hook: "agent"
+      min_studio_version: "0.1.0"
+      created_at: "2025-01-15T10:00:00Z"
+      updated_at: "2025-11-04T10:00:00Z"
+      deprecated: false
+      manifest_url: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/manifest.yaml"
