@@ -14,7 +14,7 @@ plugins:
       category: "agents"
       maturity: "stable"
       publisher: "tyk-official"
-      icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.png"
+      icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.svg"
       primary_hook: "agent"
       min_studio_version: "0.1.0"
       created_at: "2025-01-15T10:00:00Z"

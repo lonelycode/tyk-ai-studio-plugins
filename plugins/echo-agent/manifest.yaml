@@ -26,7 +26,7 @@ links:
   homepage: "https://tyk.io/ai-studio"
 
 # Display Assets
-icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.png"
+icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.svg"
 screenshots: []
 
 # Maintainers
