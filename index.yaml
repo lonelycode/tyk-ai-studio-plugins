@@ -1,6 +1,26 @@
 apiVersion: v1
-generated: "2025-11-04T10:00:00Z"
+generated: "2025-11-04T12:00:00Z"
 plugins:
+  llm-rate-limiter:
+    - id: "com.tyk.llm-rate-limiter"
+      name: "LLM Rate Limiter"
+      version: "1.2.0"
+      description: "Policy-based rate limiting for LLM requests with TPM (tokens per minute), RPM (requests per minute), and concurrent request controls. Includes a management UI."
+      oci_registry: "localhost:5101"
+      oci_repository: "plugins/llm-rate-limiter"
+      oci_tag: "v1.2"
+      oci_digest: "sha256:9514697fe4463f20601ebc896c261eaae7af26f5a7845ec4b56138486db3d960"
+      oci_platform: ["linux/amd64", "darwin/amd64", "darwin/arm64"]
+      category: "ui-extensions"
+      maturity: "beta"
+      publisher: "tyk-official"
+      icon: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-rate-limiter/icon.svg"
+      primary_hook: "post_auth"
+      min_studio_version: "2.6.0"
+      created_at: "2025-10-31T00:00:00Z"
+      updated_at: "2025-11-04T12:00:00Z"
+      deprecated: false
+      manifest_url: "https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-rate-limiter/manifest.yaml"
   echo-agent:
     - id: "com.tyk.echo-agent"
       name: "Echo Agent"
