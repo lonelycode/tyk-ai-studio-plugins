@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2025-11-04T04:02:50Z'
+generated: '2025-11-04T04:08:09Z'
 plugins:
   com.tyk.llm-rate-limiter:
   - id: com.tyk.llm-rate-limiter
@@ -26,6 +26,31 @@ plugins:
     updated_at: '2025-11-04T12:00:00Z'
     deprecated: false
     manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-rate-limiter/manifest.yaml
+  com.tyk.custom-auth-ui:
+  - id: com.tyk.custom-auth-ui
+    name: Custom Authentication with Management UI
+    version: 1.0.0
+    description: Token-based authentication plugin with live web-based management
+      interface. Demonstrates hybrid plugin capabilities with both auth enforcement
+      and UI management.
+    oci_registry: localhost:5101
+    oci_repository: plugins/custom-auth-ui
+    oci_tag: 1.0.0
+    oci_digest: sha256:724cfadd3ef45afbbb525a7eeb268d098803c83d24871a4ac371fb5cdf2496cb
+    oci_platform:
+    - linux/amd64
+    - darwin/amd64
+    - darwin/arm64
+    category: ui-extensions
+    maturity: stable
+    publisher: tyk-official
+    icon: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/custom-auth-ui/icon.svg
+    primary_hook: auth
+    min_studio_version: 2.6.0
+    created_at: '2025-09-01T00:00:00Z'
+    updated_at: '2025-11-04T16:30:00Z'
+    deprecated: false
+    manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/custom-auth-ui/manifest.yaml
   com.tyk.echo-agent:
   - id: com.tyk.echo-agent
     name: Echo Agent
