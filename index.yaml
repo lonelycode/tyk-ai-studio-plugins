@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2025-12-03T20:38:47Z'
+generated: '2025-12-03T20:44:16Z'
 plugins:
   com.tyk.llm-firewall:
   - id: com.tyk.llm-firewall
@@ -38,11 +38,11 @@ plugins:
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-firewall/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/midsommar/tree/main/community/plugins/llm-firewall
-    repository_url: https://github.com/TykTechnologies/midsommar
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-firewall
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
     support_url: https://community.tyk.io
     homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/midsommar/issues
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
     screenshots: []
     api_versions:
     - gateway-v1
