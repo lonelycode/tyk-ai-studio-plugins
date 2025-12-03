@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2025-12-03T20:24:44Z'
+generated: '2025-12-03T20:32:38Z'
 plugins:
   com.tyk.llm-firewall:
   - id: com.tyk.llm-firewall
@@ -18,9 +18,9 @@ plugins:
     category: security
     maturity: stable
     publisher: tyk-community
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins/main/plugins/llm-firewall/icon.svg
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-firewall/icon.svg
     primary_hook: pre_auth
-    min_studio_version: 2.6.0
+    min_studio_version: '2.0'
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
     deprecated: false
