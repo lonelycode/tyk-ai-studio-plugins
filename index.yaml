@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2025-12-03T19:51:54Z'
+generated: '2025-12-03T19:57:27Z'
 plugins:
   com.tyk.llm-firewall:
   - id: com.tyk.llm-firewall
@@ -18,8 +18,8 @@ plugins:
     category: security
     maturity: stable
     publisher: tyk-official
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins/main/plugins/llm-firewall/icon.svg
-    primary_hook: pre_request
+    icon: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-firewall/icon.svg
+    primary_hook: pre_auth
     min_studio_version: 2.6.0
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
@@ -27,8 +27,6 @@ plugins:
     manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-firewall/manifest.yaml
     required_services:
     - llms.proxy
-    required_kv:
-    - read
-    - write
+    required_kv: []
     required_rpc: []
     required_ui: []
