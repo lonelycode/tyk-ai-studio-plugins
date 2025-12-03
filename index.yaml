@@ -1,106 +1,35 @@
 apiVersion: v1
-generated: '2025-11-04T09:54:32Z'
+generated: '2025-12-04T00:00:00Z'
 plugins:
-  com.tyk.llm-rate-limiter:
-  - id: com.tyk.llm-rate-limiter
-    name: LLM Rate Limiter
-    version: 1.2.0
-    description: Policy-based rate limiting for LLM requests with TPM (tokens per
-      minute), RPM (requests per minute), and concurrent request controls. Includes
-      a management UI for creating and assigning rate limit policies to apps.
-    oci_registry: localhost:5101
-    oci_repository: plugins/llm-rate-limiter
-    oci_tag: v1.2
-    oci_digest: sha256:9514697fe4463f20601ebc896c261eaae7af26f5a7845ec4b56138486db3d960
-    oci_platform:
-    - linux/amd64
-    - darwin/amd64
-    - darwin/arm64
-    category: ui-extensions
-    maturity: beta
-    publisher: tyk-official
-    icon: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-rate-limiter/icon.svg
-    primary_hook: post_auth
-    min_studio_version: 2.6.0
-    created_at: '2025-10-31T00:00:00Z'
-    updated_at: '2025-11-04T12:00:00Z'
-    deprecated: false
-    manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/llm-rate-limiter/manifest.yaml
-    required_services:
-    - apps.read
-    - apps.write
-    - kv.readwrite
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  com.tyk.custom-auth-ui:
-  - id: com.tyk.custom-auth-ui
-    name: Custom Authentication with Management UI
+  com.tyk.llm-firewall:
+  - id: com.tyk.llm-firewall
+    name: LLM Firewall
     version: 1.0.0
-    description: Token-based authentication plugin with live web-based management
-      interface. Demonstrates hybrid plugin capabilities with both auth enforcement
-      and UI management.
-    oci_registry: localhost:5101
-    oci_repository: plugins/custom-auth-ui
-    oci_tag: 1.0.0
-    oci_digest: sha256:724cfadd3ef45afbbb525a7eeb268d098803c83d24871a4ac371fb5cdf2496cb
-    oci_platform:
-    - linux/amd64
-    - darwin/amd64
-    - darwin/arm64
-    category: ui-extensions
-    maturity: stable
-    publisher: tyk-official
-    icon: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/custom-auth-ui/icon.svg
-    primary_hook: auth
-    min_studio_version: 2.6.0
-    created_at: '2025-09-01T00:00:00Z'
-    updated_at: '2025-11-04T16:30:00Z'
-    deprecated: false
-    manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/custom-auth-ui/manifest.yaml
-    required_services:
-    - apps.read
-    - kv.readwrite
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  com.tyk.echo-agent:
-  - id: com.tyk.echo-agent
-    name: Echo Agent
-    version: 0.1.0
-    description: A simple test agent that wraps LLM responses with custom prefix and
-      suffix markers. Useful for testing and development.
-    oci_registry: localhost:5101
-    oci_repository: plugins/echo-agent
-    oci_tag: 0.1.0
-    oci_digest: sha256:989b453c819937a10ef657f197fb57ecd42cb69f6b2544f24d922f9d65c21f96
+    description: Security firewall for LLM requests providing content filtering, prompt
+      injection detection, and policy enforcement.
+    oci_registry: ""
+    oci_repository: plugins/llm-firewall
+    oci_tag: "1.0"
+    oci_digest: sha256:f33b8fd5a1075fdf4b66c8752a8fec336994d03da46ee1072f783b85df67ce31
     oci_platform:
     - linux/amd64
     - linux/arm64
     - darwin/amd64
     - darwin/arm64
-    category: agents
+    category: security
     maturity: stable
     publisher: tyk-official
-    icon: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/icon.svg
-    primary_hook: agent
-    min_studio_version: 0.1.0
-    created_at: '2025-01-15T10:00:00Z'
-    updated_at: '2025-11-04T10:00:00Z'
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins/main/plugins/llm-firewall/icon.svg
+    primary_hook: pre_request
+    min_studio_version: 2.6.0
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
     deprecated: false
-    manifest_url: https://raw.githubusercontent.com/lonelycode/tyk-ai-studio-plugins/main/plugins/echo-agent/manifest.yaml
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins/main/plugins/llm-firewall/manifest.yaml
     required_services:
     - llms.proxy
-    required_kv: []
+    required_kv:
+    - read
+    - write
     required_rpc: []
     required_ui: []
