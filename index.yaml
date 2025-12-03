@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2025-12-03T19:47:44Z'
+generated: '2025-12-03T19:51:54Z'
 plugins:
   com.tyk.llm-firewall:
   - id: com.tyk.llm-firewall
@@ -8,7 +8,7 @@ plugins:
     description: A phrase-based prompt filtering plugin for Tyk AI Studio's Microgateway.
       This plugin detects disallowed phrases in incoming prompts and blocks requests
       that contain policy violations before they reach the LLM.
-    oci_registry: ''
+    oci_registry: localhost:5100
     oci_repository: plugins/llm-firewall
     oci_tag: '1.0'
     oci_digest: sha256:f33b8fd5a1075fdf4b66c8752a8fec336994d03da46ee1072f783b85df67ce31
