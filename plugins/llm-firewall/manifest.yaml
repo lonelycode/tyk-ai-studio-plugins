@@ -26,7 +26,7 @@ links:
   homepage: "https://tyk.io/ai-studio"
 
 # Display Assets
-icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins/main/plugins/llm-firewall/icon.svg"
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-firewall/icon.svg"
 screenshots: []
 
 # Maintainers
@@ -36,7 +36,7 @@ maintainers:
     organization: "Tyk Technologies"
 
 publisher: "tyk-community"
-license: "Apache-2.0"
+license: "AGPL v3"
 
 # Capabilities
 capabilities:
@@ -45,7 +45,7 @@ capabilities:
 
 # Requirements & Compatibility
 requirements:
-  min_studio_version: "2.6.0"
+  min_studio_version: "2.0"
   api_versions: ["gateway-v1"]
   dependencies: []
 
