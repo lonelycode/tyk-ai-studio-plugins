@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.llm-cache"
+name: "LLM Response Cache"
+version: "1.0.0"
+description: "A caching plugin for Tyk AI Studio that caches LLM responses to reduce costs and latency. Features deterministic cache keys, prompt normalization, namespace isolation, LRU eviction, and an admin dashboard."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/llm-cache"
+  tag: "1.0"
+  digest: "sha256:8c6dd595535081b2f0b29834468b2dcf0095405cb251ea6d034e29048473b8e3"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "analytics"
+keywords: ["cache", "caching", "performance", "cost-reduction", "latency", "lru", "ttl"]
+maturity: "stable"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-community"
+license: "AGPL v3"
+
+# Capabilities
+capabilities:
+  hooks: ["post_auth", "on_before_write", "studio_ui"]
+  primary_hook: "post_auth"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.0"
+  api_versions: ["gateway-v1", "ui-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: []
+  kv: ["read", "write"]
+  rpc: []
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: false
+
+# Metadata
+created_at: "2025-12-04T00:00:00Z"
+updated_at: "2025-12-04T00:00:00Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
