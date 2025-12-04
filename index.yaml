@@ -1,6 +1,64 @@
 apiVersion: v1
-generated: '2025-12-04T04:48:57Z'
+generated: '2025-12-04T05:43:36Z'
 plugins:
+  com.tyk.llm-cache:
+  - id: com.tyk.llm-cache
+    name: LLM Response Cache
+    version: 1.0.0
+    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
+      costs and latency. Features deterministic cache keys, prompt normalization,
+      namespace isolation, LRU eviction, and an admin dashboard.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/llm-cache
+    oci_tag: '1.0'
+    oci_digest: sha256:8c6dd595535081b2f0b29834468b2dcf0095405cb251ea6d034e29048473b8e3
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: analytics
+    maturity: stable
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/icon.svg
+    primary_hook: post_auth
+    hooks:
+    - post_auth
+    - on_before_write
+    - studio_ui
+    min_studio_version: '2.0'
+    keywords:
+    - cache
+    - caching
+    - performance
+    - cost-reduction
+    - latency
+    - lru
+    - ttl
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
+    deprecated: false
+    deprecated_message: ''
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - gateway-v1
+    - ui-v1
+    dependencies: []
+    required_services: []
+    required_kv:
+    - read
+    - write
+    required_rpc: []
+    required_ui:
+    - sidebar.register
+    - route.register
   com.tyk.github-rag-ingest:
   - id: com.tyk.github-rag-ingest
     name: Git RAG Ingestion
