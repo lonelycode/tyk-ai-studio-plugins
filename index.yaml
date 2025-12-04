@@ -1,13 +1,13 @@
 apiVersion: v1
-generated: '2025-12-04T04:46:07Z'
+generated: '2025-12-04T04:48:57Z'
 plugins:
   com.tyk.github-rag-ingest:
   - id: com.tyk.github-rag-ingest
-    name: GitHub RAG Ingestion
+    name: Git RAG Ingestion
     version: 1.0.0
     description: A comprehensive plugin for Tyk AI Studio that ingests content from
-      GitHub repositories into RAG datasources with support for incremental sync,
-      multiple chunking strategies, and scheduled updates.
+      Git repositories into RAG datasources with support for incremental sync, multiple
+      chunking strategies, and scheduled updates.
     oci_registry: docker.tyk.io
     oci_repository: studio-plugins/github-rag-ingest
     oci_tag: '1.0'
