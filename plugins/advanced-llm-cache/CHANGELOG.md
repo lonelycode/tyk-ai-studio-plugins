@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1] - 2025-12-04
+
+### Added
+- Added advanced tuning fields to RedisConfig: ConnectTimeoutSeconds, AsyncUpdateTimeoutSeconds, ScanBatchSize, MaxEntrySizeBytes, LogAsyncErrors
+- Added logAsyncErrors and scanBatchSize fields
+- Implemented configurable connect timeout
+- Configurable replicas
+
 ## [1.0.0] - 2025-12-04
 
 ### Added
