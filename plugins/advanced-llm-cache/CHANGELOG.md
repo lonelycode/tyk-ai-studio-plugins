@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2] - 2025-12-04
+
+### Added
+- Confiuguratiuon UI
+- Quick start UI
+
+
 ## [1.0.1] - 2025-12-04
 
 ### Added

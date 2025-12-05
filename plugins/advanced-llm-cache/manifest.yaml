@@ -1,7 +1,7 @@
 # Identity & Versioning
 id: "com.tyk.advanced-llm-cache"
 name: "Advanced LLM Cache"
-version: "1.0.1"
+version: "1.0.2"
 description: "Enterprise-grade LLM response caching with distributed backends (Redis), failover mode, hierarchical TTL policies, audit logging, cost-based caching rules, and advanced observability."
 
 # OCI Distribution
@@ -9,7 +9,7 @@ oci:
   registry: "docker.tyk.io"
   repository: "studio-plugins/advanced-llm-cache"
   tag: "1.0"
-  digest: "sha256:1b19ba8dced9fe3701d6fef050b641641a5a85e2a7c32bc57376d6cd05730937"
+  digest: "sha256:5add23145654ef8f93e2388b7799d905c20468ac0092554ab3d03c19090bd10e"
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
