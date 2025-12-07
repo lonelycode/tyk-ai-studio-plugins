@@ -1,6 +1,72 @@
 apiVersion: v1
-generated: '2025-12-05T12:00:28Z'
+generated: '2025-12-07T23:59:20Z'
 plugins:
+  com.tyk.enterprise.llm-load-balancer:
+  - id: com.tyk.enterprise.llm-load-balancer
+    name: LLM Load Balancer
+    version: 1.0.0
+    description: LLM load balancer with round-robin, weighted, latency-based strategies,
+      sticky sessions, health checks, circuit breakers, priority tiers, and failover
+      pools.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/llm-load-balancer
+    oci_tag: 1.0.0
+    oci_digest: sha256:00708fd38fe4187dda61be3f72d7cbbd9b184dd718c55a6b7c01a9cebb58c436
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: traffic-management
+    maturity: stable
+    publisher: tyk-official
+    license: Commercial
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.0.0/icon.svg
+    primary_hook: post_auth
+    hooks:
+    - studio_ui
+    - post_auth
+    - on_response
+    min_studio_version: '2.0'
+    keywords:
+    - load-balancer
+    - enterprise
+    - failover
+    - health-checks
+    - circuit-breaker
+    - sticky-sessions
+    - round-robin
+    - latency-based
+    - high-availability
+    created_at: '2025-12-08T00:00:00Z'
+    updated_at: '2025-12-08T00:00:00Z'
+    deprecated: false
+    deprecated_message: ''
+    replacement: ''
+    enterprise_only: true
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-load-balancer
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - gateway-v1
+    - ui-v1
+    dependencies: []
+    required_services:
+    - apps.read
+    - kv.readwrite
+    - license.read
+    - llms.read
+    - llms.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
   com.tyk.llm-cache:
   - id: com.tyk.llm-cache
     name: LLM Response Cache
@@ -16,7 +82,7 @@ plugins:
     - linux/amd64
     - darwin/arm64
     category: analytics
-    maturity: beta
+    maturity: stable
     publisher: tyk-community
     license: AGPL v3
     icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/icon.svg
