@@ -15,7 +15,7 @@ oci:
 # Discovery & Classification
 category: "traffic-management"
 keywords: ["load-balancer", "enterprise", "failover", "health-checks", "circuit-breaker", "sticky-sessions", "round-robin", "latency-based", "high-availability"]
-maturity: "stable"
+maturity: "beta"
 
 # Documentation & Support
 links:
