@@ -9,7 +9,7 @@ oci:
   registry: "docker.tyk.io"
   repository: "studio-plugins/github-rag-ingest"
   tag: "1.0"
-  digest: "sha256:3100befdcd81c06ec77f755f06893dfb32aa92a863ce5c04d8ad8376a6581719"
+  digest: "sha256:da356f46b07d5e8483d476cd0271dfa06de06a8bfa4951542d97d1067dd9606e"
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
