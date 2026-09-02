@@ -70,6 +70,6 @@ enterprise_only: false
 # Metadata
 created_at: "2026-04-04T00:00:00Z"
 updated_at: "2026-04-04T00:00:00Z"
-deprecated: false
-deprecated_message: ""
+deprecated: true
+deprecated_message: "Superseded by 1.1.0, which carries the current security hardening and requires AI Studio 2.1 or newer. Install 1.1.0 instead."
 replacement: ""
