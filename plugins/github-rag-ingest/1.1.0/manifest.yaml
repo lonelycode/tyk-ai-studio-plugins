@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.github-rag-ingest"
+name: "Git RAG Ingestion"
+version: "1.1.0"
+description: "A comprehensive plugin for Tyk AI Studio that ingests content from Git repositories into RAG datasources with support for incremental sync, multiple chunking strategies, and scheduled updates."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/github-rag-ingest"
+  tag: "1.1.0"
+  digest: "sha256:753f6f8a7f7da30d3919384d6ebf8c6885ffc19dea934971b3ced4583ed2a14c"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "data"
+keywords: ["rag", "github", "ingestion", "vector-store", "chunking", "sync", "repository"]
+maturity: "beta"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.1.0/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-community"
+license: "AGPL v3"
+
+# Capabilities
+capabilities:
+  hooks: ["studio_ui", "scheduler"]
+  primary_hook: "studio_ui"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.1.0"
+  api_versions: ["ui-v1", "scheduler-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: ["datasources.query", "datasources.read", "datasources.write"]
+  kv: ["read", "write"]
+  rpc: ["call"]
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: false
+
+# Metadata
+created_at: "2026-09-02T22:33:45Z"
+updated_at: "2026-09-02T22:33:45Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
