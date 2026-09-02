@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2026-09-02T22:38:04Z'
+generated: '2026-09-02T22:44:13Z'
 plugins:
   com.tyk.llm-price-sync:
   - id: com.tyk.llm-price-sync
@@ -92,8 +92,9 @@ plugins:
     - budget
     created_at: '2026-04-04T00:00:00Z'
     updated_at: '2026-04-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-price-sync/1.0.0/manifest.yaml
@@ -228,8 +229,11 @@ plugins:
     - enterprise
     created_at: '2026-04-04T00:00:00Z'
     updated_at: '2026-04-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead. This version's artifact
+      carries no valid signature and will fail to install on any gateway configured
+      with OCI_PLUGINS_REQUIRE_SIGNATURE=true.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.0.0/manifest.yaml
@@ -356,8 +360,11 @@ plugins:
     - observability
     created_at: '2026-03-08T00:00:00Z'
     updated_at: '2026-03-08T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead. This version's artifact
+      carries no valid signature and will fail to install on any gateway configured
+      with OCI_PLUGINS_REQUIRE_SIGNATURE=true.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/advanced-llm-cache/1.0.4/manifest.yaml
@@ -416,8 +423,9 @@ plugins:
     - observability
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-05T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/advanced-llm-cache/1.0.3/manifest.yaml
@@ -476,8 +484,9 @@ plugins:
     - observability
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-05T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/advanced-llm-cache/1.0.2/manifest.yaml
@@ -590,8 +599,9 @@ plugins:
     - concurrency
     created_at: '2026-04-02T00:00:00Z'
     updated_at: '2026-04-02T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.0.0/manifest.yaml
@@ -707,8 +717,9 @@ plugins:
     - ttl
     created_at: '2026-03-08T00:00:00Z'
     updated_at: '2026-03-08T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.1/manifest.yaml
@@ -764,8 +775,9 @@ plugins:
     - ttl
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/manifest.yaml
@@ -868,8 +880,9 @@ plugins:
     - policy
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-firewall/1.0.0/manifest.yaml
@@ -988,8 +1001,9 @@ plugins:
     - high-availability
     created_at: '2025-12-08T00:00:00Z'
     updated_at: '2025-12-08T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.0.3/manifest.yaml
@@ -1053,8 +1067,9 @@ plugins:
     - high-availability
     created_at: '2025-12-08T00:00:00Z'
     updated_at: '2025-12-08T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.0.1/manifest.yaml
@@ -1118,8 +1133,9 @@ plugins:
     - high-availability
     created_at: '2025-12-08T00:00:00Z'
     updated_at: '2025-12-08T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: true
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.0.0/manifest.yaml
@@ -1241,8 +1257,9 @@ plugins:
     - repository
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.2/manifest.yaml
@@ -1301,8 +1318,9 @@ plugins:
     - repository
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.1/manifest.yaml
@@ -1361,8 +1379,9 @@ plugins:
     - repository
     created_at: '2025-12-04T00:00:00Z'
     updated_at: '2025-12-04T00:00:00Z'
-    deprecated: false
-    deprecated_message: ''
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
     enterprise_only: false
     manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/manifest.yaml
