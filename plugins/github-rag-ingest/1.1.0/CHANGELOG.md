@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0] - 2026-09-02
+
+### Security
+- Enable SSH host-key verification in the git client
+- Validate Git clone URLs to prevent SSRF
+- Encrypt plugin secrets at rest in KV storage
+
+### Fixed
+- Stop the simple chunker splitting multi-byte UTF-8 characters
+- Align the plugin module with the parent module's Go version
+
+### Changed
+- Minimum AI Studio version is now 2.1
+
 ## [1.0.2] - 2026-04-01
 
 ### Fixed

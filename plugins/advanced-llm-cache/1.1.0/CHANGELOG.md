@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2026-09-02
+
+### Security
+- Redact the Redis password in RPC config responses
+
+### Fixed
+- Stop the hit-count update resurrecting deleted cache entries
+- Repair the licensing vet failure and align the module Go version
+
+### Changed
+- Minimum AI Studio version is now 2.1
+
 ## [1.0.3] - 2026-03-08
 
 ### BugFix
