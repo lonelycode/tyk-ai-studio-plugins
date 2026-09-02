@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.rate-limiter"
+name: "Rate Limiter"
+version: "1.1.0"
+description: "Sliding-window rate limiting with composable key dimensions for LLM requests. Supports request rate, token rate, and concurrent request limits."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/rate-limiter"
+  tag: "1.1.0"
+  digest: "sha256:c1a0915e8a46fc0ec525003cf8c3aaae2eedee4545fc4c5a0edda7b6350ffd74"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "traffic-management"
+keywords: ["rate-limiting", "throttling", "tokens", "cost-control", "sliding-window", "concurrency"]
+maturity: "beta"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/rate-limiter"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.1.0/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-community"
+license: "AGPL v3"
+
+# Capabilities
+capabilities:
+  hooks: ["studio_ui", "post_auth", "on_response"]
+  primary_hook: "post_auth"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.1.0"
+  api_versions: ["gateway-v1", "ui-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: ["kv.readwrite"]
+  kv: ["read", "write"]
+  rpc: ["call"]
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: false
+
+# Metadata
+created_at: "2026-09-02T22:32:53Z"
+updated_at: "2026-09-02T22:32:53Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
