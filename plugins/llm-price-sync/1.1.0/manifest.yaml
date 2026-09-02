@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.llm-price-sync"
+name: "LLM Price Sync"
+version: "1.1.0"
+description: "Automatically sync LLM model prices from llm-prices.com to keep cost tracking accurate and up-to-date."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/llm-price-sync"
+  tag: "1.1.0"
+  digest: "sha256:7e332f0747cf71673bda25f842eb7de4ce832a14b3eb55c0a6ea6b65f0079191"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "analytics"
+keywords: ["pricing", "cost-tracking", "llm-prices", "sync", "model-pricing", "budget"]
+maturity: "beta"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-price-sync"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-price-sync/1.1.0/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-community"
+license: "AGPL v3"
+
+# Capabilities
+capabilities:
+  hooks: ["studio_ui"]
+  primary_hook: "studio_ui"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.1.0"
+  api_versions: ["ui-v1", "rpc-v1", "kv-v1", "scheduler-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: ["kv.readwrite", "pricing.read", "pricing.write", "scheduler.manage"]
+  kv: ["read", "write"]
+  rpc: ["call"]
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: false
+
+# Metadata
+created_at: "2026-09-02T22:29:58Z"
+updated_at: "2026-09-02T22:29:58Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
