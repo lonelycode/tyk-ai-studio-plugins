@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.enterprise.llm-load-balancer"
+name: "LLM Load Balancer"
+version: "1.1.0"
+description: "LLM load balancer with round-robin, weighted, latency-based strategies, sticky sessions, health checks, circuit breakers, priority tiers, and failover pools."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/llm-load-balancer"
+  tag: "1.1.0"
+  digest: "sha256:be4473d88745d406b433cc21e13add81bfb1f68680fa586987a73b0dcb716a6e"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "traffic-management"
+keywords: ["load-balancer", "enterprise", "failover", "health-checks", "circuit-breaker", "sticky-sessions", "round-robin", "latency-based", "high-availability"]
+maturity: "beta"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-load-balancer"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-load-balancer/1.1.0/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-official"
+license: "Commercial"
+
+# Capabilities
+capabilities:
+  hooks: ["studio_ui", "post_auth", "on_response"]
+  primary_hook: "post_auth"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.1.0"
+  api_versions: ["gateway-v1", "ui-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: ["apps.read", "kv.readwrite", "license.read", "llms.read", "llms.write"]
+  kv: ["read", "write"]
+  rpc: ["call"]
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: true
+
+# Metadata
+created_at: "2026-09-02T22:35:53Z"
+updated_at: "2026-09-02T22:35:53Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
