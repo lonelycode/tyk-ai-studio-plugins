@@ -1,0 +1,75 @@
+# Identity & Versioning
+id: "com.tyk.enterprise.oauth2-client-credentials"
+name: "OAuth2 Client Credentials Auth"
+version: "1.1.0"
+description: "Enterprise OAuth2.0 client-credentials authentication with auto-provisioning. Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and maps them to AI Studio Apps for RBAC-based gateway access control."
+
+# OCI Distribution
+oci:
+  registry: "docker.tyk.io"
+  repository: "studio-plugins/oauth2-client-credentials"
+  tag: "1.1.0"
+  digest: "sha256:3fb4a9946d4333fc79625fc35d004ce3aee34830e26f521b24568b1ccfb84c34"
+  platform: ["linux/amd64", "darwin/arm64"]
+
+# Discovery & Classification
+category: "security"
+keywords: ["oauth2", "client-credentials", "authentication", "jwt", "entra-id", "auth0", "okta", "idp", "rbac", "oidc", "enterprise"]
+maturity: "beta"
+
+# Documentation & Support
+links:
+  documentation: "https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/oauth2-client-credentials"
+  repository: "https://github.com/TykTechnologies/ai-studio-community-plugins"
+  support: "https://community.tyk.io"
+  issues: "https://github.com/TykTechnologies/ai-studio-community-plugins/issues"
+  homepage: "https://tyk.io/ai-studio"
+
+# Display Assets
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.1.0/icon.svg"
+screenshots: []
+
+# Maintainers
+maintainers:
+  - name: "Tyk Technologies"
+    email: "support@tyk.io"
+    organization: "Tyk Technologies"
+
+publisher: "tyk-official"
+license: "Commercial"
+
+# Capabilities
+capabilities:
+  hooks: ["auth", "studio_ui"]
+  primary_hook: "auth"
+
+# Requirements & Compatibility
+requirements:
+  min_studio_version: "2.1.0"
+  api_versions: ["gateway-v1", "ui-v1", "rpc-v1", "kv-v1"]
+  dependencies: []
+
+# Security & Permissions
+permissions:
+  services: ["apps.read", "apps.readwrite", "apps.write", "kv.readwrite", "license.read"]
+  kv: ["read", "write"]
+  rpc: ["call"]
+  ui: ["sidebar.register", "route.register"]
+
+# Configuration Schema
+config_schema_url: ""
+
+# Verification
+attestation:
+  enabled: false
+  sigstore_bundle_url: ""
+
+# Enterprise
+enterprise_only: true
+
+# Metadata
+created_at: "2026-09-02T22:36:51Z"
+updated_at: "2026-09-02T22:36:51Z"
+deprecated: false
+deprecated_message: ""
+replacement: ""
