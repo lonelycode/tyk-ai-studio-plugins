@@ -1,5 +1,5 @@
 apiVersion: v1
-generated: '2026-09-02T22:44:13Z'
+generated: '2026-09-10T12:13:40Z'
 plugins:
   com.tyk.llm-price-sync:
   - id: com.tyk.llm-price-sync
@@ -123,50 +123,45 @@ plugins:
     required_ui:
     - sidebar.register
     - route.register
-  com.tyk.enterprise.oauth2-client-credentials:
-  - id: com.tyk.enterprise.oauth2-client-credentials
-    name: OAuth2 Client Credentials Auth
+  com.tyk.rate-limiter:
+  - id: com.tyk.rate-limiter
+    name: Rate Limiter
     version: 1.1.0
-    description: Enterprise OAuth2.0 client-credentials authentication with auto-provisioning.
-      Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and
-      maps them to AI Studio Apps for RBAC-based gateway access control.
+    description: Sliding-window rate limiting with composable key dimensions for LLM
+      requests. Supports request rate, token rate, and concurrent request limits.
     oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/oauth2-client-credentials
+    oci_repository: studio-plugins/rate-limiter
     oci_tag: 1.1.0
-    oci_digest: sha256:3fb4a9946d4333fc79625fc35d004ce3aee34830e26f521b24568b1ccfb84c34
+    oci_digest: sha256:c1a0915e8a46fc0ec525003cf8c3aaae2eedee4545fc4c5a0edda7b6350ffd74
     oci_platform:
     - linux/amd64
     - darwin/arm64
-    category: security
+    category: traffic-management
     maturity: beta
-    publisher: tyk-official
-    license: Commercial
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.1.0/icon.svg
-    primary_hook: auth
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.1.0/icon.svg
+    primary_hook: post_auth
     hooks:
-    - auth
     - studio_ui
+    - post_auth
+    - on_response
     min_studio_version: 2.1.0
     keywords:
-    - oauth2
-    - client-credentials
-    - authentication
-    - jwt
-    - entra-id
-    - auth0
-    - okta
-    - idp
-    - rbac
-    - oidc
-    - enterprise
-    created_at: '2026-09-02T22:36:51Z'
-    updated_at: '2026-09-02T22:36:51Z'
+    - rate-limiting
+    - throttling
+    - tokens
+    - cost-control
+    - sliding-window
+    - concurrency
+    created_at: '2026-09-02T22:32:53Z'
+    updated_at: '2026-09-02T22:32:53Z'
     deprecated: false
     deprecated_message: ''
     replacement: ''
-    enterprise_only: true
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.1.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/oauth2-client-credentials
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.1.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/rate-limiter
     repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
     support_url: https://community.tyk.io
     homepage_url: https://tyk.io/ai-studio
@@ -175,15 +170,9 @@ plugins:
     api_versions:
     - gateway-v1
     - ui-v1
-    - rpc-v1
-    - kv-v1
     dependencies: []
     required_services:
-    - apps.read
-    - apps.readwrite
-    - apps.write
     - kv.readwrite
-    - license.read
     required_kv:
     - read
     - write
@@ -192,52 +181,45 @@ plugins:
     required_ui:
     - sidebar.register
     - route.register
-  - id: com.tyk.enterprise.oauth2-client-credentials
-    name: OAuth2 Client Credentials Auth
+  - id: com.tyk.rate-limiter
+    name: Rate Limiter
     version: 1.0.0
-    description: Enterprise OAuth2.0 client-credentials authentication with auto-provisioning.
-      Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and
-      maps them to AI Studio Apps for RBAC-based gateway access control.
+    description: Sliding-window rate limiting with composable key dimensions for LLM
+      requests. Supports request rate, token rate, and concurrent request limits.
     oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/oauth2-client-credentials
+    oci_repository: studio-plugins/rate-limiter
     oci_tag: 1.0.0
-    oci_digest: sha256:39a7b29423efb6dfb53aa3947aebba2e7ad504e22182d4dc07f56cd20e8f56ec
+    oci_digest: sha256:dad24074492a9939dac5352a6e4b0ff98851563aadbe50e1ef9b2d6a17aad440
     oci_platform:
     - linux/amd64
     - darwin/arm64
-    category: security
+    category: traffic-management
     maturity: beta
-    publisher: tyk-official
-    license: Commercial
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.0.0/icon.svg
-    primary_hook: auth
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.0.0/icon.svg
+    primary_hook: post_auth
     hooks:
-    - auth
     - studio_ui
-    min_studio_version: 2.1.0
+    - post_auth
+    - on_response
+    min_studio_version: 2.6.0
     keywords:
-    - oauth2
-    - client-credentials
-    - authentication
-    - jwt
-    - entra-id
-    - auth0
-    - okta
-    - idp
-    - rbac
-    - oidc
-    - enterprise
-    created_at: '2026-04-04T00:00:00Z'
-    updated_at: '2026-04-04T00:00:00Z'
+    - rate-limiting
+    - throttling
+    - tokens
+    - cost-control
+    - sliding-window
+    - concurrency
+    created_at: '2026-04-02T00:00:00Z'
+    updated_at: '2026-04-02T00:00:00Z'
     deprecated: true
     deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead. This version's artifact
-      carries no valid signature and will fail to install on any gateway configured
-      with OCI_PLUGINS_REQUIRE_SIGNATURE=true.
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
     replacement: ''
-    enterprise_only: true
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.0.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/oauth2-client-credentials
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/rate-limiter
     repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
     support_url: https://community.tyk.io
     homepage_url: https://tyk.io/ai-studio
@@ -246,20 +228,504 @@ plugins:
     api_versions:
     - gateway-v1
     - ui-v1
-    - rpc-v1
-    - kv-v1
     dependencies: []
     required_services:
-    - apps.read
-    - apps.readwrite
-    - apps.write
     - kv.readwrite
-    - license.read
     required_kv:
     - read
     - write
     required_rpc:
     - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  com.tyk.github-rag-ingest:
+  - id: com.tyk.github-rag-ingest
+    name: Git RAG Ingestion
+    version: 1.1.0
+    description: A comprehensive plugin for Tyk AI Studio that ingests content from
+      Git repositories into RAG datasources with support for incremental sync, multiple
+      chunking strategies, and scheduled updates.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/github-rag-ingest
+    oci_tag: 1.1.0
+    oci_digest: sha256:753f6f8a7f7da30d3919384d6ebf8c6885ffc19dea934971b3ced4583ed2a14c
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: data
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.1.0/icon.svg
+    primary_hook: studio_ui
+    hooks:
+    - studio_ui
+    - scheduler
+    min_studio_version: 2.1.0
+    keywords:
+    - rag
+    - github
+    - ingestion
+    - vector-store
+    - chunking
+    - sync
+    - repository
+    created_at: '2026-09-02T22:33:45Z'
+    updated_at: '2026-09-02T22:33:45Z'
+    deprecated: false
+    deprecated_message: ''
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.1.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - ui-v1
+    - scheduler-v1
+    dependencies: []
+    required_services:
+    - datasources.query
+    - datasources.read
+    - datasources.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  - id: com.tyk.github-rag-ingest
+    name: Git RAG Ingestion
+    version: 1.0.2
+    description: A comprehensive plugin for Tyk AI Studio that ingests content from
+      Git repositories into RAG datasources with support for incremental sync, multiple
+      chunking strategies, and scheduled updates.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/github-rag-ingest
+    oci_tag: 1.0.2
+    oci_digest: sha256:5f762818ae64fbde350592d30bcc4709d9894ed3adf9de803657b68a865f535b
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: data
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.2/icon.svg
+    primary_hook: studio_ui
+    hooks:
+    - studio_ui
+    - scheduler
+    min_studio_version: '2.0'
+    keywords:
+    - rag
+    - github
+    - ingestion
+    - vector-store
+    - chunking
+    - sync
+    - repository
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.2/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - ui-v1
+    - scheduler-v1
+    dependencies: []
+    required_services:
+    - datasources.query
+    - datasources.read
+    - datasources.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  - id: com.tyk.github-rag-ingest
+    name: Git RAG Ingestion
+    version: 1.0.1
+    description: A comprehensive plugin for Tyk AI Studio that ingests content from
+      Git repositories into RAG datasources with support for incremental sync, multiple
+      chunking strategies, and scheduled updates.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/github-rag-ingest
+    oci_tag: '1.1'
+    oci_digest: sha256:d631cee38334091ef315fbd5ca5586691d2364a312ccee2a0dfd232708cd585b
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: data
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/icon.svg
+    primary_hook: studio_ui
+    hooks:
+    - studio_ui
+    - scheduler
+    min_studio_version: '2.0'
+    keywords:
+    - rag
+    - github
+    - ingestion
+    - vector-store
+    - chunking
+    - sync
+    - repository
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.1/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - ui-v1
+    - scheduler-v1
+    dependencies: []
+    required_services:
+    - datasources.query
+    - datasources.read
+    - datasources.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  - id: com.tyk.github-rag-ingest
+    name: Git RAG Ingestion
+    version: 1.0.0
+    description: A comprehensive plugin for Tyk AI Studio that ingests content from
+      Git repositories into RAG datasources with support for incremental sync, multiple
+      chunking strategies, and scheduled updates.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/github-rag-ingest
+    oci_tag: '1.0'
+    oci_digest: sha256:da356f46b07d5e8483d476cd0271dfa06de06a8bfa4951542d97d1067dd9606e
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: data
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/icon.svg
+    primary_hook: studio_ui
+    hooks:
+    - studio_ui
+    - scheduler
+    min_studio_version: '2.0'
+    keywords:
+    - rag
+    - github
+    - ingestion
+    - vector-store
+    - chunking
+    - sync
+    - repository
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - ui-v1
+    - scheduler-v1
+    dependencies: []
+    required_services:
+    - datasources.query
+    - datasources.read
+    - datasources.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  com.tyk.enterprise.asset-catalog:
+  - id: com.tyk.enterprise.asset-catalog
+    name: Asset Catalog (Enterprise)
+    version: 1.0.0
+    description: 'Register, own, version, relate and govern AI assets the gateway
+      does not proxy: agents, prompts, skills, guardrails and external AI services.
+      Adds them to the AI Portal with ownership, lineage, lifecycle tags, relationships,
+      community submissions and an access-request workflow that raises events for
+      downstream automation.'
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/asset-catalog
+    oci_tag: 1.0.0
+    oci_digest: sha256:72a7cc091f61044e53da294775bebaaa60328d74234d7c34b6359a1eae00cdd8
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: ui-extensions
+    maturity: beta
+    publisher: tyk-official
+    license: Commercial
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/asset-catalog/1.0.0/icon.svg
+    primary_hook: resource_provider
+    hooks:
+    - resource_provider
+    - studio_ui
+    - portal_ui
+    min_studio_version: 2.3.0
+    keywords:
+    - asset-catalog
+    - governance
+    - agents
+    - prompts
+    - skills
+    - guardrails
+    - portal
+    - ownership
+    - lineage
+    - access-requests
+    - enterprise
+    created_at: '2026-09-10T12:12:03Z'
+    updated_at: '2026-09-10T12:12:03Z'
+    deprecated: false
+    deprecated_message: ''
+    replacement: ''
+    enterprise_only: true
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/asset-catalog/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/asset-catalog
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - ui-v1
+    - rpc-v1
+    - kv-v1
+    dependencies: []
+    required_services:
+    - kv.readwrite
+    - license.read
+    - notifications.write
+    - resource-types.manage
+    - metadata.read
+    - metadata.write
+    required_kv:
+    - read
+    - write
+    required_rpc:
+    - call
+    required_ui:
+    - sidebar.register
+    - route.register
+  com.tyk.llm-cache:
+  - id: com.tyk.llm-cache
+    name: LLM Response Cache
+    version: 1.1.0
+    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
+      costs and latency. Features deterministic cache keys, prompt normalization,
+      namespace isolation, LRU eviction, and an admin dashboard.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/llm-cache
+    oci_tag: 1.1.0
+    oci_digest: sha256:523d4b19b3e0a1d68a1892871079ceb1e5680ecd7c8e5283dbde094aacacdce0
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: analytics
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.1.0/icon.svg
+    primary_hook: post_auth
+    hooks:
+    - post_auth
+    - on_before_write
+    - studio_ui
+    min_studio_version: 2.1.0
+    keywords:
+    - cache
+    - caching
+    - performance
+    - cost-reduction
+    - latency
+    - lru
+    - ttl
+    created_at: '2026-09-02T22:31:15Z'
+    updated_at: '2026-09-02T22:31:15Z'
+    deprecated: false
+    deprecated_message: ''
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.1.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - gateway-v1
+    - ui-v1
+    dependencies: []
+    required_services: []
+    required_kv:
+    - read
+    - write
+    required_rpc: []
+    required_ui:
+    - sidebar.register
+    - route.register
+  - id: com.tyk.llm-cache
+    name: LLM Response Cache
+    version: 1.0.1
+    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
+      costs and latency. Features deterministic cache keys, prompt normalization,
+      namespace isolation, LRU eviction, and an admin dashboard.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/llm-cache
+    oci_tag: '1.0'
+    oci_digest: sha256:5f43366d049e976e28bfa1da7c09d04baf02ac2d8fa70aa143e1ccc7050fcdfc
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: analytics
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/icon.svg
+    primary_hook: post_auth
+    hooks:
+    - post_auth
+    - on_before_write
+    - studio_ui
+    min_studio_version: '2.0'
+    keywords:
+    - cache
+    - caching
+    - performance
+    - cost-reduction
+    - latency
+    - lru
+    - ttl
+    created_at: '2026-03-08T00:00:00Z'
+    updated_at: '2026-03-08T00:00:00Z'
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.1/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - gateway-v1
+    - ui-v1
+    dependencies: []
+    required_services: []
+    required_kv:
+    - read
+    - write
+    required_rpc: []
+    required_ui:
+    - sidebar.register
+    - route.register
+  - id: com.tyk.llm-cache
+    name: LLM Response Cache
+    version: 1.0.0
+    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
+      costs and latency. Features deterministic cache keys, prompt normalization,
+      namespace isolation, LRU eviction, and an admin dashboard.
+    oci_registry: docker.tyk.io
+    oci_repository: studio-plugins/llm-cache
+    oci_tag: '1.0'
+    oci_digest: sha256:cb1d497ac26f8b4e197815fffd61c18b8839d2bcb3f9c2c9f8e4e2fc9784d7d4
+    oci_platform:
+    - linux/amd64
+    - darwin/arm64
+    category: analytics
+    maturity: beta
+    publisher: tyk-community
+    license: AGPL v3
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/icon.svg
+    primary_hook: post_auth
+    hooks:
+    - post_auth
+    - on_before_write
+    - studio_ui
+    min_studio_version: '2.0'
+    keywords:
+    - cache
+    - caching
+    - performance
+    - cost-reduction
+    - latency
+    - lru
+    - ttl
+    created_at: '2025-12-04T00:00:00Z'
+    updated_at: '2025-12-04T00:00:00Z'
+    deprecated: true
+    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+    replacement: ''
+    enterprise_only: false
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
+    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
+    support_url: https://community.tyk.io
+    homepage_url: https://tyk.io/ai-studio
+    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
+    screenshots: []
+    api_versions:
+    - gateway-v1
+    - ui-v1
+    dependencies: []
+    required_services: []
+    required_kv:
+    - read
+    - write
+    required_rpc: []
     required_ui:
     - sidebar.register
     - route.register
@@ -506,296 +972,6 @@ plugins:
     - write
     required_rpc:
     - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  com.tyk.rate-limiter:
-  - id: com.tyk.rate-limiter
-    name: Rate Limiter
-    version: 1.1.0
-    description: Sliding-window rate limiting with composable key dimensions for LLM
-      requests. Supports request rate, token rate, and concurrent request limits.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/rate-limiter
-    oci_tag: 1.1.0
-    oci_digest: sha256:c1a0915e8a46fc0ec525003cf8c3aaae2eedee4545fc4c5a0edda7b6350ffd74
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: traffic-management
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.1.0/icon.svg
-    primary_hook: post_auth
-    hooks:
-    - studio_ui
-    - post_auth
-    - on_response
-    min_studio_version: 2.1.0
-    keywords:
-    - rate-limiting
-    - throttling
-    - tokens
-    - cost-control
-    - sliding-window
-    - concurrency
-    created_at: '2026-09-02T22:32:53Z'
-    updated_at: '2026-09-02T22:32:53Z'
-    deprecated: false
-    deprecated_message: ''
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.1.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/rate-limiter
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - gateway-v1
-    - ui-v1
-    dependencies: []
-    required_services:
-    - kv.readwrite
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  - id: com.tyk.rate-limiter
-    name: Rate Limiter
-    version: 1.0.0
-    description: Sliding-window rate limiting with composable key dimensions for LLM
-      requests. Supports request rate, token rate, and concurrent request limits.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/rate-limiter
-    oci_tag: 1.0.0
-    oci_digest: sha256:dad24074492a9939dac5352a6e4b0ff98851563aadbe50e1ef9b2d6a17aad440
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: traffic-management
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.0.0/icon.svg
-    primary_hook: post_auth
-    hooks:
-    - studio_ui
-    - post_auth
-    - on_response
-    min_studio_version: 2.6.0
-    keywords:
-    - rate-limiting
-    - throttling
-    - tokens
-    - cost-control
-    - sliding-window
-    - concurrency
-    created_at: '2026-04-02T00:00:00Z'
-    updated_at: '2026-04-02T00:00:00Z'
-    deprecated: true
-    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/rate-limiter/1.0.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/rate-limiter
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - gateway-v1
-    - ui-v1
-    dependencies: []
-    required_services:
-    - kv.readwrite
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  com.tyk.llm-cache:
-  - id: com.tyk.llm-cache
-    name: LLM Response Cache
-    version: 1.1.0
-    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
-      costs and latency. Features deterministic cache keys, prompt normalization,
-      namespace isolation, LRU eviction, and an admin dashboard.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/llm-cache
-    oci_tag: 1.1.0
-    oci_digest: sha256:523d4b19b3e0a1d68a1892871079ceb1e5680ecd7c8e5283dbde094aacacdce0
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: analytics
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.1.0/icon.svg
-    primary_hook: post_auth
-    hooks:
-    - post_auth
-    - on_before_write
-    - studio_ui
-    min_studio_version: 2.1.0
-    keywords:
-    - cache
-    - caching
-    - performance
-    - cost-reduction
-    - latency
-    - lru
-    - ttl
-    created_at: '2026-09-02T22:31:15Z'
-    updated_at: '2026-09-02T22:31:15Z'
-    deprecated: false
-    deprecated_message: ''
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.1.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - gateway-v1
-    - ui-v1
-    dependencies: []
-    required_services: []
-    required_kv:
-    - read
-    - write
-    required_rpc: []
-    required_ui:
-    - sidebar.register
-    - route.register
-  - id: com.tyk.llm-cache
-    name: LLM Response Cache
-    version: 1.0.1
-    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
-      costs and latency. Features deterministic cache keys, prompt normalization,
-      namespace isolation, LRU eviction, and an admin dashboard.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/llm-cache
-    oci_tag: '1.0'
-    oci_digest: sha256:5f43366d049e976e28bfa1da7c09d04baf02ac2d8fa70aa143e1ccc7050fcdfc
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: analytics
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/icon.svg
-    primary_hook: post_auth
-    hooks:
-    - post_auth
-    - on_before_write
-    - studio_ui
-    min_studio_version: '2.0'
-    keywords:
-    - cache
-    - caching
-    - performance
-    - cost-reduction
-    - latency
-    - lru
-    - ttl
-    created_at: '2026-03-08T00:00:00Z'
-    updated_at: '2026-03-08T00:00:00Z'
-    deprecated: true
-    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.1/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - gateway-v1
-    - ui-v1
-    dependencies: []
-    required_services: []
-    required_kv:
-    - read
-    - write
-    required_rpc: []
-    required_ui:
-    - sidebar.register
-    - route.register
-  - id: com.tyk.llm-cache
-    name: LLM Response Cache
-    version: 1.0.0
-    description: A caching plugin for Tyk AI Studio that caches LLM responses to reduce
-      costs and latency. Features deterministic cache keys, prompt normalization,
-      namespace isolation, LRU eviction, and an admin dashboard.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/llm-cache
-    oci_tag: '1.0'
-    oci_digest: sha256:cb1d497ac26f8b4e197815fffd61c18b8839d2bcb3f9c2c9f8e4e2fc9784d7d4
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: analytics
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/icon.svg
-    primary_hook: post_auth
-    hooks:
-    - post_auth
-    - on_before_write
-    - studio_ui
-    min_studio_version: '2.0'
-    keywords:
-    - cache
-    - caching
-    - performance
-    - cost-reduction
-    - latency
-    - lru
-    - ttl
-    created_at: '2025-12-04T00:00:00Z'
-    updated_at: '2025-12-04T00:00:00Z'
-    deprecated: true
-    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/llm-cache/1.0.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/llm-cache
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - gateway-v1
-    - ui-v1
-    dependencies: []
-    required_services: []
-    required_kv:
-    - read
-    - write
-    required_rpc: []
     required_ui:
     - sidebar.register
     - route.register
@@ -1163,59 +1339,67 @@ plugins:
     required_ui:
     - sidebar.register
     - route.register
-  com.tyk.github-rag-ingest:
-  - id: com.tyk.github-rag-ingest
-    name: Git RAG Ingestion
+  com.tyk.enterprise.oauth2-client-credentials:
+  - id: com.tyk.enterprise.oauth2-client-credentials
+    name: OAuth2 Client Credentials Auth
     version: 1.1.0
-    description: A comprehensive plugin for Tyk AI Studio that ingests content from
-      Git repositories into RAG datasources with support for incremental sync, multiple
-      chunking strategies, and scheduled updates.
+    description: Enterprise OAuth2.0 client-credentials authentication with auto-provisioning.
+      Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and
+      maps them to AI Studio Apps for RBAC-based gateway access control.
     oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/github-rag-ingest
+    oci_repository: studio-plugins/oauth2-client-credentials
     oci_tag: 1.1.0
-    oci_digest: sha256:753f6f8a7f7da30d3919384d6ebf8c6885ffc19dea934971b3ced4583ed2a14c
+    oci_digest: sha256:3fb4a9946d4333fc79625fc35d004ce3aee34830e26f521b24568b1ccfb84c34
     oci_platform:
     - linux/amd64
     - darwin/arm64
-    category: data
+    category: security
     maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.1.0/icon.svg
-    primary_hook: studio_ui
+    publisher: tyk-official
+    license: Commercial
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.1.0/icon.svg
+    primary_hook: auth
     hooks:
+    - auth
     - studio_ui
-    - scheduler
     min_studio_version: 2.1.0
     keywords:
-    - rag
-    - github
-    - ingestion
-    - vector-store
-    - chunking
-    - sync
-    - repository
-    created_at: '2026-09-02T22:33:45Z'
-    updated_at: '2026-09-02T22:33:45Z'
+    - oauth2
+    - client-credentials
+    - authentication
+    - jwt
+    - entra-id
+    - auth0
+    - okta
+    - idp
+    - rbac
+    - oidc
+    - enterprise
+    created_at: '2026-09-02T22:36:51Z'
+    updated_at: '2026-09-02T22:36:51Z'
     deprecated: false
     deprecated_message: ''
     replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.1.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    enterprise_only: true
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.1.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/oauth2-client-credentials
     repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
     support_url: https://community.tyk.io
     homepage_url: https://tyk.io/ai-studio
     issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
     screenshots: []
     api_versions:
+    - gateway-v1
     - ui-v1
-    - scheduler-v1
+    - rpc-v1
+    - kv-v1
     dependencies: []
     required_services:
-    - datasources.query
-    - datasources.read
-    - datasources.write
+    - apps.read
+    - apps.readwrite
+    - apps.write
+    - kv.readwrite
+    - license.read
     required_kv:
     - read
     - write
@@ -1224,181 +1408,69 @@ plugins:
     required_ui:
     - sidebar.register
     - route.register
-  - id: com.tyk.github-rag-ingest
-    name: Git RAG Ingestion
-    version: 1.0.2
-    description: A comprehensive plugin for Tyk AI Studio that ingests content from
-      Git repositories into RAG datasources with support for incremental sync, multiple
-      chunking strategies, and scheduled updates.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/github-rag-ingest
-    oci_tag: 1.0.2
-    oci_digest: sha256:5f762818ae64fbde350592d30bcc4709d9894ed3adf9de803657b68a865f535b
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: data
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.2/icon.svg
-    primary_hook: studio_ui
-    hooks:
-    - studio_ui
-    - scheduler
-    min_studio_version: '2.0'
-    keywords:
-    - rag
-    - github
-    - ingestion
-    - vector-store
-    - chunking
-    - sync
-    - repository
-    created_at: '2025-12-04T00:00:00Z'
-    updated_at: '2025-12-04T00:00:00Z'
-    deprecated: true
-    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.2/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - ui-v1
-    - scheduler-v1
-    dependencies: []
-    required_services:
-    - datasources.query
-    - datasources.read
-    - datasources.write
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  - id: com.tyk.github-rag-ingest
-    name: Git RAG Ingestion
-    version: 1.0.1
-    description: A comprehensive plugin for Tyk AI Studio that ingests content from
-      Git repositories into RAG datasources with support for incremental sync, multiple
-      chunking strategies, and scheduled updates.
-    oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/github-rag-ingest
-    oci_tag: '1.1'
-    oci_digest: sha256:d631cee38334091ef315fbd5ca5586691d2364a312ccee2a0dfd232708cd585b
-    oci_platform:
-    - linux/amd64
-    - darwin/arm64
-    category: data
-    maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/icon.svg
-    primary_hook: studio_ui
-    hooks:
-    - studio_ui
-    - scheduler
-    min_studio_version: '2.0'
-    keywords:
-    - rag
-    - github
-    - ingestion
-    - vector-store
-    - chunking
-    - sync
-    - repository
-    created_at: '2025-12-04T00:00:00Z'
-    updated_at: '2025-12-04T00:00:00Z'
-    deprecated: true
-    deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
-    replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.1/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
-    repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
-    support_url: https://community.tyk.io
-    homepage_url: https://tyk.io/ai-studio
-    issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
-    screenshots: []
-    api_versions:
-    - ui-v1
-    - scheduler-v1
-    dependencies: []
-    required_services:
-    - datasources.query
-    - datasources.read
-    - datasources.write
-    required_kv:
-    - read
-    - write
-    required_rpc:
-    - call
-    required_ui:
-    - sidebar.register
-    - route.register
-  - id: com.tyk.github-rag-ingest
-    name: Git RAG Ingestion
+  - id: com.tyk.enterprise.oauth2-client-credentials
+    name: OAuth2 Client Credentials Auth
     version: 1.0.0
-    description: A comprehensive plugin for Tyk AI Studio that ingests content from
-      Git repositories into RAG datasources with support for incremental sync, multiple
-      chunking strategies, and scheduled updates.
+    description: Enterprise OAuth2.0 client-credentials authentication with auto-provisioning.
+      Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and
+      maps them to AI Studio Apps for RBAC-based gateway access control.
     oci_registry: docker.tyk.io
-    oci_repository: studio-plugins/github-rag-ingest
-    oci_tag: '1.0'
-    oci_digest: sha256:da356f46b07d5e8483d476cd0271dfa06de06a8bfa4951542d97d1067dd9606e
+    oci_repository: studio-plugins/oauth2-client-credentials
+    oci_tag: 1.0.0
+    oci_digest: sha256:39a7b29423efb6dfb53aa3947aebba2e7ad504e22182d4dc07f56cd20e8f56ec
     oci_platform:
     - linux/amd64
     - darwin/arm64
-    category: data
+    category: security
     maturity: beta
-    publisher: tyk-community
-    license: AGPL v3
-    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/icon.svg
-    primary_hook: studio_ui
+    publisher: tyk-official
+    license: Commercial
+    icon: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.0.0/icon.svg
+    primary_hook: auth
     hooks:
+    - auth
     - studio_ui
-    - scheduler
-    min_studio_version: '2.0'
+    min_studio_version: 2.1.0
     keywords:
-    - rag
-    - github
-    - ingestion
-    - vector-store
-    - chunking
-    - sync
-    - repository
-    created_at: '2025-12-04T00:00:00Z'
-    updated_at: '2025-12-04T00:00:00Z'
+    - oauth2
+    - client-credentials
+    - authentication
+    - jwt
+    - entra-id
+    - auth0
+    - okta
+    - idp
+    - rbac
+    - oidc
+    - enterprise
+    created_at: '2026-04-04T00:00:00Z'
+    updated_at: '2026-04-04T00:00:00Z'
     deprecated: true
     deprecated_message: Superseded by 1.1.0, which carries the current security hardening
-      and requires AI Studio 2.1 or newer. Install 1.1.0 instead.
+      and requires AI Studio 2.1 or newer. Install 1.1.0 instead. This version's artifact
+      carries no valid signature and will fail to install on any gateway configured
+      with OCI_PLUGINS_REQUIRE_SIGNATURE=true.
     replacement: ''
-    enterprise_only: false
-    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/github-rag-ingest/1.0.0/manifest.yaml
-    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/github-rag-ingest
+    enterprise_only: true
+    manifest_url: https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.0.0/manifest.yaml
+    documentation_url: https://github.com/TykTechnologies/tyk-ai-studio-plugins-ce/tree/main/plugins/oauth2-client-credentials
     repository_url: https://github.com/TykTechnologies/ai-studio-community-plugins
     support_url: https://community.tyk.io
     homepage_url: https://tyk.io/ai-studio
     issues_url: https://github.com/TykTechnologies/ai-studio-community-plugins/issues
     screenshots: []
     api_versions:
+    - gateway-v1
     - ui-v1
-    - scheduler-v1
+    - rpc-v1
+    - kv-v1
     dependencies: []
     required_services:
-    - datasources.query
-    - datasources.read
-    - datasources.write
+    - apps.read
+    - apps.readwrite
+    - apps.write
+    - kv.readwrite
+    - license.read
     required_kv:
     - read
     - write
