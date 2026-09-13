@@ -51,7 +51,7 @@ requirements:
 
 # Security & Permissions
 permissions:
-  services: ["kv.readwrite", "license.read", "notifications.write", "resource-types.manage", "metadata.read", "metadata.write"]
+  services: ["kv.readwrite", "license.read", "notifications.write", "resource-types.manage", "metadata.read", "metadata.write", "rbac.register"]
   kv: ["read", "write"]
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]
