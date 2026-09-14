@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.1] - 2026-09-15
+
+### Removed
+- The `require_license_feature` configuration option and the `feature_asset_catalog` entitlement claim. The plugin now requires a valid enterprise license unconditionally; any enterprise license is accepted and there is no switch to relax the check.
+
 ## [1.1.0] - 2026-09-14
 
 ### Changed
