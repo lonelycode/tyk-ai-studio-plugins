@@ -16,8 +16,8 @@ Register, own, version, relate and govern the AI assets your organisation cares 
 
 ## Requirements
 
-- Tyk AI Studio ≥ 2.2.0 with a valid enterprise license (optionally gated on the `feature_asset_catalog` entitlement via configuration).
-- Service scopes: `kv.readwrite`, `license.read`, `notifications.write`, `resource-types.manage`, `metadata.read`, `metadata.write` (the last two for Governance Metadata; without them the plugin still works, governance is simply skipped).
+- Tyk AI Studio ≥ 2.2.0 with a valid enterprise license. The plugin exits at start-up without one.
+- Service scopes: `kv.readwrite`, `license.read`, `notifications.write`, `resource-types.manage`, `metadata.read`, `metadata.write` (for Governance Metadata; without them the plugin still works, governance is simply skipped), `rbac.register` (registers one *Assets: <type>* permission row per asset type; without it only the static rows exist).
 - The event bus is only available when Studio runs with `GATEWAY_MODE=control`; in standalone mode the plugin still works but events are logged as skipped.
 
 ## Configuration
@@ -28,7 +28,6 @@ Register, own, version, relate and govern the AI assets your organisation cares 
 | `default_requires_approval` | `false` | Approval requirement for types that do not declare one. |
 | `notify_admins` | `true` | Raise an in-Studio notification for every new access request. |
 | `event_topic_prefix` | `asset_catalog` | Events are published as `<prefix>.<kind>`. |
-| `require_license_feature` | `false` | Exit unless the license lists `feature_asset_catalog`. |
 
 ## Data model
 
@@ -39,16 +38,39 @@ Register, own, version, relate and govern the AI assets your organisation cares 
 
 ### Rules
 
-- Listings are visible to every portal user; non-owners see only `approved`, `production` and `deprecated` assets. Owners and admins see everything.
-- Gated fields are visible to owners, admins and users with a grant. If the asset (or its type) does not require approval, everyone sees everything.
-- Portal users create assets only through the Submission form. Admins create directly. Owners edit and version their own assets. Content edits require `change_notes`.
-- `approved`, `production` and `deprecated` are admin-only stages by default (per-type policy).
-- `depends_on` relationships cannot form cycles. Deprecating or deleting an asset that others depend on requires an admin `force` and emits `asset.dependency_warning`.
+- Listings are visible to every portal user; non-owners see only `approved`, `production` and `deprecated` assets. Owners and holders of *Assets: read* (general or per type) see everything, including drafts and inactive assets.
+- Gated fields are visible to owners, asset managers (*Assets: write*) and users with a grant. If the asset (or its type) does not require approval, everyone sees everything. Reading the catalog alone never unlocks gated values.
+- Portal users create assets only through the Submission form. Asset managers create directly. Owners and asset managers edit and version assets. Content edits require `change_notes`.
+- `approved`, `production` and `deprecated` are reserved stages by default (per-type policy): moving an asset into one needs the *Assets: publish* (or per-type `assets-<type>:publish`) permission. Publish holders may also move any asset between the other stages (send it back for rework).
+- `depends_on` relationships cannot form cycles. Deprecating or deleting an asset that others depend on requires `force` from an asset manager and emits `asset.dependency_warning`.
 - Type schemas can be extended at any time. Removing a property that existing assets still use requires `force`. Existing assets are re-validated on their next edit only.
 
 ## RPC contract (UI ↔ plugin)
 
-All UI calls go through one router. Portal pages call `portalPluginAPI.call(method, payload)`; admin pages call `pluginAPI.call(method, payload)`. Both carry the authenticated user; `admin_*` methods require an administrator.
+All UI calls go through one router. Portal pages call `portalPluginAPI.call(method, payload)`; admin pages call `pluginAPI.call(method, payload)`. Both carry the authenticated user.
+
+**Permissions.** `admin_*` methods are gated by Studio's role-based access control. The manifest declares the plugin's permission resources (`rbac.resources`) and the permission each admin method needs (`rbac.rpc_methods`); Studio enforces them on `POST /plugins/:id/rpc/:method` before the call reaches the plugin, the router checks them again, and the catalog applies the finer rows on every call. In the role editor the plugin appears under **Plugins → Asset Catalog** with these rows:
+
+| Row | Actions | Unlocks |
+|---|---|---|
+| *Asset Catalog* (base) | read, write, execute | **read** (every catalog role starts here): open the plugin's pages, list types, `admin_stats`, and call the asset methods, whose outcome is then decided by the rows below; without an *Assets* read row the Assets page lists only the publicly visible stages, like the portal. **write**: catalog administrator, i.e. every row below on every type, plus `admin_reseed_examples` and editing the plugin configuration. |
+| *Asset types* | read, write, delete | write: define, edit, deactivate and reactivate types (`delete` is declared for future use). |
+| *Assets* | read, write, delete, publish | **read**: see every asset of every type, including drafts and inactive ones (gated values still need access). **write**: create assets; edit, version, relate, restore, transfer ownership, revoke grants, set the privacy score and approval flag on any asset; `force` deprecations; see grants and gated values. **delete**: deactivate or hard-delete. **publish**: move any asset into an `approved`, `production` or `deprecated` stage, and between the other stages as a reviewer. |
+| *Assets: <type>* (one row per active type, registered at runtime) | read, write, delete, publish | the same four, narrowed to one asset class; a role holding only `Assets: Agent: write` manages Agents and cannot see draft Prompts. |
+| *Access requests* | read, write | read: list and inspect every request; write: approve, deny or cancel any pending request. |
+
+Rules of thumb: every catalog role needs the base **read**; a narrower row never implies the base read, and Studio only lets a role open the plugin's pages and asset methods with it. The per-type rows need the `rbac.register` service scope (declared in the manifest, approved by an administrator); without it the static rows still apply. Full administrators and roles holding *Installed plugins: execute* hold every row. Owners keep their existing rights on their own assets. Portal (`portal-rpc`) calls are not governed by roles, but a full administrator or base-write holder browsing the portal keeps their rights there.
+
+Example roles:
+
+| Role | Rows | Can |
+|---|---|---|
+| Catalog viewer | base read | open the pages; nothing else (the Viewer system role also receives every read row automatically) |
+| Reviewer | base read + *Assets: publish* (or *Assets: Prompt: publish*) | release any asset (of that type) into a reserved stage or send it back; cannot edit, create or delete |
+| Access reviewer | base read + *Access requests: write* | see and decide every access request |
+| Type designer | base read + *Asset types: write* | define and retire types |
+| Agent editor | base read + *Assets: Agent: write* | create and edit any Agent asset, see its gated values and grants; nothing on other types |
+| Catalog administrator | base write | everything, as before |
 
 Every response has the shape:
 
@@ -68,39 +90,43 @@ Every response has the shape:
 | `get_governance_schema` | `{ type_slug }` | `{ available, has_fields, schema: { fields, vocabularies, enforcement, json_schema, schema_slugs } }` — the resolved Governance Metadata schema, for the portal edit form |
 | `list_versions` | `{ id }` | `{ versions: [{ version, parent_version, change_notes, changed_by, created_at }] }` newest first |
 | `get_version` | `{ id, version }` | `{ version, parent_version, change_notes, changed_by, created_at, snapshot: Asset }` |
-| `restore_version` | `{ id, version, change_notes? }` | `AssetView` (owner or admin). Creates a new version whose content equals `version`; history is never rewritten |
+| `restore_version` | `{ id, version, change_notes? }` | `AssetView` (owner or asset manager). Creates a new version whose content equals `version`; history is never rewritten |
 | `my_assets` | same as `list_assets` | assets the caller owns (any role), including drafts |
-| `update_asset` | `{ id, name?, description?, tags?, metadata?, extra?, lineage?, governance?, change_notes }` | `AssetView` (content changes need `change_notes`; `governance` replaces the Governance Metadata values without creating a version; admins may also send `privacy_score`, `requires_approval`, `clear_requires_approval`) |
+| `update_asset` | `{ id, name?, description?, tags?, metadata?, extra?, lineage?, governance?, change_notes }` | `AssetView` (content changes need `change_notes`; `governance` replaces the Governance Metadata values without creating a version; asset managers may also send `privacy_score`, `requires_approval`, `clear_requires_approval`) |
 | `set_relationships` | `{ id, relationships: [{ kind, target_asset_id, note? }], change_notes? }` | `AssetView` (replaces all outbound edges) |
-| `transfer_ownership` | `{ id, role: "responsible" \| "accountable", to: { user_id, email, name } }` | `AssetView` (accountable owner or admin) |
+| `transfer_ownership` | `{ id, role: "responsible" \| "accountable", to: { user_id, email, name } }` | `AssetView` (accountable owner or asset manager) |
 | `transition` | `{ id, stage, note?, force? }` | `AssetView` |
 | `get_access_request_form` | `{ asset_id }` | `{ schema, requires_approval, has_access, pending_request_id }` |
 | `request_access` | `{ asset_id, form }` | `AccessRequest` (`code: not_required` when the caller already has access) |
 | `my_requests` | `{ status? }` | `{ requests: AccessRequest[] }` |
 | `cancel_request` | `{ id }` | `AccessRequest` |
 | `my_grants` | `{}` | `{ grants: [{ asset_id, asset_name, type_slug, granted_at, granted_by, request_id }] }` |
-| `revoke_grant` | `{ asset_id, user_id }` | `AssetView` (accountable owner or admin) |
+| `revoke_grant` | `{ asset_id, user_id }` | `AssetView` (accountable owner or asset manager) |
 | `whoami` | `{}` | `{ user_id, email, name, is_admin, groups }` |
 
 ### Admin methods
 
-| Method | Payload | Returns |
-|---|---|---|
-| `admin_list_types` | `{}` | like `list_types` but includes inactive types |
-| `admin_upsert_type` | `{ slug, name, description?, icon?, schema?, requires_approval?, access_request_schema?, lifecycle_policy?, relationship_kinds?, has_privacy_score?, force? }` | `Type` |
-| `admin_deactivate_type` / `admin_reactivate_type` | `{ slug }` | `Type` |
-| `admin_list_assets` | like `list_assets` | all assets, including inactive |
-| `admin_create_asset` | `{ type_slug, name, description?, tags?, metadata?, extra?, relationships?, lineage?, responsible?, accountable?, requires_approval?, privacy_score?, lifecycle?, governance?, change_notes? }` | `AssetView` (`governance` is validated and stored by Studio before the asset is persisted) |
-| `admin_delete_asset` | `{ id, hard?, force? }` | `{ deleted, id, hard }` |
-| `admin_list_requests` | `{ status? }` | `{ requests: AccessRequest[] }` |
-| `admin_get_request` | `{ id }` | `AccessRequest` |
-| `admin_decide_request` | `{ id, decision: "approved" \| "denied", note? }` | `AccessRequest` |
-| `admin_reseed_examples` | `{}` | `{ seeded: true }` |
-| `admin_stats` | `{}` | `{ types, assets, by_type, by_lifecycle, pending_requests, total_requests, grants }` |
+| Method | Permission | Payload | Returns |
+|---|---|---|---|
+| `admin_list_types` | `read` (base) | `{}` | like `list_types` but includes inactive types |
+| `admin_upsert_type` | `asset-types:write` | `{ slug, name, description?, icon?, schema?, requires_approval?, access_request_schema?, lifecycle_policy?, relationship_kinds?, has_privacy_score?, force? }` | `Type` |
+| `admin_deactivate_type` / `admin_reactivate_type` | `asset-types:write` | `{ slug }` | `Type` |
+| `admin_list_assets` | `read` (base); the catalog lists what `assets:read` / `assets-<type>:read` allow | like `list_assets` | all assets the caller may see, including inactive |
+| `admin_create_asset` | `read` (base); the catalog needs `assets:write` or `assets-<type>:write` (+ `assets:publish` or `assets-<type>:publish` for a reserved `lifecycle`) | `{ type_slug, name, description?, tags?, metadata?, extra?, relationships?, lineage?, responsible?, accountable?, requires_approval?, privacy_score?, lifecycle?, governance?, change_notes? }` | `AssetView` (`governance` is validated and stored by Studio before the asset is persisted) |
+| `admin_delete_asset` | `read` (base); the catalog needs `assets:delete` or `assets-<type>:delete` | `{ id, hard?, force? }` | `{ deleted, id, hard }` |
+| `admin_transition` | `read` (base); same rules as `transition` | `{ id, stage, note?, force? }` | `AssetView` (admin-page alias of `transition`, so reviewer roles pass Studio's gate) |
+| `admin_revoke_grant` | `read` (base); same rules as `revoke_grant` | `{ asset_id, user_id }` | `AssetView` (admin-page alias of `revoke_grant`) |
+| `admin_list_requests` | `access-requests:read` | `{ status? }` | `{ requests: AccessRequest[] }` |
+| `admin_get_request` | `access-requests:read` | `{ id }` | `AccessRequest` |
+| `admin_decide_request` | `access-requests:write` | `{ id, decision: "approved" \| "denied", note? }` | `AccessRequest` |
+| `admin_reseed_examples` | `write` (base) | `{}` | `{ seeded: true }` |
+| `admin_stats` | `read` (base) | `{}` | `{ types, assets, by_type, by_lifecycle, pending_requests, total_requests, grants }` |
+
+Why base read: Studio gates each method on one fixed permission, while the per-type rows are created at runtime, so the asset methods are opened to every catalog role and the catalog decides per asset. Unlisted methods would need the base write, which is why the admin page calls the `admin_*` aliases. The user method `transition` into a reserved stage needs `assets:publish` or `assets-<type>:publish`; owners move assets through the other stages, and publish holders may move any asset of the type between stages.
 
 ### `AssetView`
 
-The asset plus: `type_name`, `gated_fields` (names of gated properties), `has_access`, `is_owner`, `can_edit`, `effective_requires_approval`, `pending_request_id`, `inbound[] { kind, from_asset_id, from_name, from_type }`, `related[] { kind, asset_id, name, type_slug, lifecycle, note }`, `allowed_transitions`. When `has_access` is false the gated keys are absent from `metadata` and `grants` is empty. Single-asset reads (`get_asset`) also carry `governed`, `governance_display[] { key, label, type, value }` (the portal-visible Governance Metadata, for everyone who can see the asset) and, for editors only, `governance` (every stored value).
+The asset plus: `type_name`, `gated_fields` (names of gated properties), `has_access`, `is_owner`, `can_edit`, `can_manage` (holds the assets or per-type write row), `can_delete` (the delete row), `effective_requires_approval`, `pending_request_id`, `inbound[] { kind, from_asset_id, from_name, from_type }`, `related[] { kind, asset_id, name, type_slug, lifecycle, note }`, `allowed_transitions`. When `has_access` is false the gated keys are absent from `metadata` and `grants` is empty. Single-asset reads (`get_asset`) also carry `governed`, `governance_display[] { key, label, type, value }` (the portal-visible Governance Metadata, for everyone who can see the asset) and, for editors only, `governance` (every stored value).
 
 ## Events
 
@@ -177,6 +203,9 @@ cd ui && npm install && npm run build
 
 # Dev environment (plugin watcher builds enterprise plugins automatically)
 make dev-full-ent-plugins
+
+# Browser walkthrough of the permission rows (from the repository root, dev stack running)
+cd tests/ui && npx playwright test tests/asset-catalog-rbac.spec.ts --project=chromium
 ```
 
 Register the binary in Admin → Plugins with `file:///app/bin/plugins/asset-catalog`, grant the service scopes listed above, and activate it. Release with `make plugin-publish NAME=asset-catalog` from the repository root.
