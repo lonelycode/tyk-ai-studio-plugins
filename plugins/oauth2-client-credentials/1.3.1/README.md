@@ -46,9 +46,12 @@ Whether that App needs a human is up to you:
   - **To approve:** review and edit the App in Apps (owner, grants, budget), then approve it under OAuth2 Auth → App OAuth2 Settings → Pending approvals. Activating the App in Apps also approves it. Approval activates the App and sends it to the gateways, so it authenticates within seconds, before the next configuration push.
   - **To reject:** rejecting deletes the App.
 - **Per mapping.** Each template mapping can override the plugin-wide setting: required, not required, or default. An App waits for approval if any mapping it was provisioned through requires approval. For example, auto-approve a cheap-model template and gate an expensive one.
-- **Turning approval off later.** An App still waiting is approved on its client's next request.
+- **Later tokens from the same client.** Whether a waiting App still needs approval is judged on what it was provisioned with (the permissions and templates recorded in its metadata), never on the token asking. A later token with only ungated permissions does not approve an App that holds a gated template's grants. Studio tells the gateways the App is still waiting, and they refuse the client at once for a minute rather than holding each request for `provision_timeout_seconds`.
+- **Turning approval off later.** An App still waiting is approved on its client's next request, once no mapping it was provisioned through requires approval. If one of those mappings was removed, the App stays waiting for a human.
 
-The approval mode needs the `apps.lifecycle` and `notifications.write` service scopes (approve them when upgrading) and AI Studio 2.2.1.
+**Fails closed.** The App is deactivated before its client binding is written, so it is never active while waiting. If it cannot be deactivated, it is deleted and the client is refused. That happens on AI Studio older than 2.2.1, which lacks the governance API, since the host does not enforce the plugin's minimum version. If approving cannot activate the App, it stays in the pending list.
+
+The approval mode needs the `apps.lifecycle` and `notifications.write` service scopes (approve them when upgrading) and AI Studio 2.2.1. Without approval, nothing needs the governance API.
 
 ## Validation
 

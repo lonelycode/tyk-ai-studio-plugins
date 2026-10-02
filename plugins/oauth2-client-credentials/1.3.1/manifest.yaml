@@ -1,15 +1,15 @@
 # Identity & Versioning
 id: "com.tyk.enterprise.oauth2-client-credentials"
 name: "OAuth2 Client Credentials Auth"
-version: "1.3.0"
+version: "1.3.1"
 description: "Enterprise OAuth2.0 client-credentials authentication with auto-provisioning. Validates JWT access tokens from external IdPs (MS Entra ID, Auth0, Okta) and maps them to AI Studio Apps for RBAC-based gateway access control."
 
 # OCI Distribution
 oci:
   registry: "docker.tyk.io"
   repository: "studio-plugins/oauth2-client-credentials"
-  tag: "1.3.0"
-  digest: "sha256:748d7d741011e7a49f835a40fbb65707adb226dc6b926a24060beaa318db5493"
+  tag: "1.3.1"
+  digest: "sha256:d35625bfbc4125e7def5a83b386443c434afa91879295b14d8b425b0accac24e"
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
@@ -26,7 +26,7 @@ links:
   homepage: "https://tyk.io/ai-studio"
 
 # Display Assets
-icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.3.0/icon.svg"
+icon: "https://raw.githubusercontent.com/TykTechnologies/tyk-ai-studio-plugins-ce/main/plugins/oauth2-client-credentials/1.3.1/icon.svg"
 screenshots: []
 
 # Maintainers
@@ -68,8 +68,8 @@ attestation:
 enterprise_only: true
 
 # Metadata
-created_at: "2026-10-02T07:23:56Z"
-updated_at: "2026-10-02T07:23:56Z"
+created_at: "2026-10-02T09:22:05Z"
+updated_at: "2026-10-02T09:22:05Z"
 deprecated: false
 deprecated_message: ""
 replacement: ""

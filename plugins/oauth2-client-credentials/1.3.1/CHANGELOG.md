@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1] - 2026-10-02
+
+### Fixed
+- Approval could be bypassed by a narrower token: an App awaiting approval was approved and activated when the same client later sent a token with only ungated permissions. Whether a waiting App still needs approval is now judged on what it was provisioned with, never on the token asking; gateways are told the App is still waiting and refuse the client at once instead of holding each request for the provisioning timeout.
+- Approval failed open when the App could not be deactivated, which always happened on AI Studio 2.2.0 (no governance API): the App ended up active and approved. The App is now deactivated before its client binding is written and deleted if that fails, so the client is refused. An approval that cannot activate the App leaves it pending.
+
+1.3.0 is superseded by this release and is not listed; upgrade straight to 1.3.1.
+
 ## [1.3.0] - 2026-10-02
 
 ### Added
