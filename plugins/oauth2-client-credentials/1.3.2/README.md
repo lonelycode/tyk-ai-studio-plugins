@@ -9,7 +9,7 @@ Attach the plugin to an endpoint as an auth plugin. An endpoint with auth plugin
 - An LLM: the LLM's plugins.
 - A datasource, tool, model router, semantic router or custom-endpoint plugin: the **Authentication plugins** section on its detail page.
 
-The App the token maps to must still hold the endpoint. This needs AI Studio with per-endpoint auth plugin lists (core #710).
+The App the token maps to must still hold the endpoint. Auth plugin lists on endpoints other than LLMs need AI Studio 2.2.1 or later.
 
 **Token scopes are not enforced.** A valid token gives exactly the access of the App its client binding maps to, meaning that App's LLMs, tools and datasources, whatever `scope` or `scp` claims the token carries. Claims are only used to choose templates during auto-provisioning (see below). To narrow what a client can reach, narrow its App. If your IdP issues tokens with different scopes for one client and you need them treated differently, bind them to different clients.
 
@@ -74,14 +74,4 @@ The auth response carries:
 - **The user id:** the token's subject claim, `subject_claim` per provider (default `sub`).
 - **`auth_actor`:** the acting agent, which is `act.sub` for a delegated (RFC 8693) token, otherwise `azp`, otherwise `client_id`.
 
-The gateway records them with the request as **For** and **Agent** on Studio's proxy logs (core #711). They are for audit only; the client binding decides the App.
-
-## Development
-
-```bash
-go mod tidy                        # go.sum is not committed
-go test -race -tags enterprise ./...
-make build                         # local binaries; release with make plugin-publish NAME=oauth2-client-credentials from the repo root
-```
-
-`PluginVersion` in `main.go` must match `manifest.json` (`TestPluginVersionMatchesManifest`).
+The gateway records them with the request as **For** and **Agent** on Studio's proxy logs (AI Studio 2.2.1 or later). They are for audit only; the client binding decides the App.

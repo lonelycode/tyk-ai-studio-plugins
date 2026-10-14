@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2] - 2026-10-14
+
+### Fixed
+- Signing keys are refreshed when `jwks_cache_ttl_seconds` passes, so a key the IdP removes stops being accepted within one TTL. If the JWKS endpoint is unreachable, cached keys stay usable for up to `jwks_max_stale_seconds` (default 86400) past the TTL, each use logged as a warning
+
+### Changed
+- Documents that token scopes are not enforced: a token has exactly its App's access
+- Requires AI Studio 2.3.0
+
 ## [1.3.1] - 2026-10-02
 
 ### Fixed

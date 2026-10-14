@@ -51,7 +51,7 @@ requirements:
 
 # Security & Permissions
 permissions:
-  services: ["apps.read", "apps.readwrite", "kv.readwrite", "control.send", "license.read", "scheduler.manage"]
+  services: ["apps.read", "apps.write", "kv.readwrite", "control.send", "license.read", "scheduler.manage"]
   kv: []
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]

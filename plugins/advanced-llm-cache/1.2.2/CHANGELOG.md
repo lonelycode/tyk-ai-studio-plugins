@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.2.2] - 2026-10-14
+
+### Added
+- Declares the `apps.write` service scope, needed to save per-app cache settings on AI Studio 2.3.0. Approve it when upgrading
+
+### Fixed
+- Redis `tls_enabled` now takes effect (it was ignored and the connection was plaintext). Check that your Redis endpoint accepts TLS before upgrading, and rotate the Redis password if it crossed the network in plaintext
+- The Redis database and cluster addresses set in the configuration form now apply. A stored `tls_skip_verify` stays ignored, with a warning; use `tls_insecure` to turn off certificate verification
+- The Redis password is masked in the configuration form
+- Configuration updates no longer race in-flight requests, and audit events are never written to a closed audit log
+- Backend swaps no longer race requests, and shutdown is idempotent
+- The audit file is created with mode 0600
+
+### Removed
+- The sharding, Redis read/write timeout and cost-rule settings, which the plugin never used
+
+### Changed
+- Requires AI Studio 2.3.0
+
 ## [1.2.1] - 2026-09-25
 
 ### Fixed

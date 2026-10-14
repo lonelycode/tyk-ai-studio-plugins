@@ -51,7 +51,7 @@ requirements:
 
 # Security & Permissions
 permissions:
-  services: ["apps.read", "apps.readwrite", "apps.write", "apps.lifecycle", "kv.readwrite", "license.read", "notifications.write"]
+  services: ["apps.read", "apps.write", "apps.lifecycle", "kv.readwrite", "license.read", "notifications.write"]
   kv: ["read", "write"]
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]

@@ -51,7 +51,7 @@ requirements:
 
 # Security & Permissions
 permissions:
-  services: ["datasources.query", "datasources.read", "datasources.write"]
+  services: ["kv.readwrite", "datasources.read", "datasources.write", "datasources.embeddings", "datasources.query", "scheduler.manage"]
   kv: ["read", "write"]
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]

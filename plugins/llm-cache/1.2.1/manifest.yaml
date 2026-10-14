@@ -2,7 +2,7 @@
 id: "com.tyk.llm-cache"
 name: "LLM Response Cache"
 version: "1.2.1"
-description: "Cache LLM responses to reduce costs and latency. Supports deterministic caching with prompt normalization, namespace isolation, and LRU eviction."
+description: "A caching plugin for Tyk AI Studio that caches LLM responses to reduce costs and latency. Features deterministic cache keys, prompt normalization, namespace isolation, LRU eviction, and an admin dashboard."
 
 # OCI Distribution
 oci:
@@ -13,8 +13,8 @@ oci:
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
-category: ""
-keywords: []
+category: "analytics"
+keywords: ["cache", "caching", "performance", "cost-reduction", "latency", "lru", "ttl"]
 maturity: "beta"
 
 # Documentation & Support
@@ -46,13 +46,13 @@ capabilities:
 # Requirements & Compatibility
 requirements:
   min_studio_version: "2.3.0"
-  api_versions: []
+  api_versions: ["gateway-v1", "ui-v1"]
   dependencies: []
 
 # Security & Permissions
 permissions:
   services: ["apps.read", "kv.readwrite", "control.send"]
-  kv: []
+  kv: ["read", "write"]
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]
 

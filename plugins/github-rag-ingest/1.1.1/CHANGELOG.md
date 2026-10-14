@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.1] - 2026-10-14
+
+### Added
+- The marketplace entry now lists every service scope the plugin uses (adds `kv.readwrite`, `datasources.embeddings` and `scheduler.manage`); AI Studio 2.3.0 enforces approved scopes, so approve them when upgrading
+- `vault_token` and `secret_encryption_key` accept `$SECRET/NAME` (resolved by AI Studio 2.3.0) or `$ENV/NAME` references, and are masked in the configuration form
+- `known_hosts_path` for SSH repositories
+
+### Fixed
+- `CancelJob` stops the running ingestion, and a queued job cancelled before it starts never runs
+- The clone cache is private: by default under the user cache directory (mode 0700), and a configured `cache_path` must not be world-writable, a symlink, owned by another user, or under a directory owned by another user
+- Vault secret IDs are random, not derived from names
+- Plugin storage errors are reported instead of being treated as missing data
+
+### Changed
+- Requires AI Studio 2.3.0 (secret references, `PLUGIN_ENV_PASSTHROUGH`). Delete the old shared `/tmp/github-rag-cache` after upgrading
+
 ## [1.1.0] - 2026-09-02
 
 ### Security
