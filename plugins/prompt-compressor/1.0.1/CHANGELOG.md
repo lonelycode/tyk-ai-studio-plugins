@@ -1,8 +1,9 @@
 # Changelog
 
-## [1.0.0] - 2026-10-21
+## [1.0.1] - 2026-10-21
 
-First release. Needs Tyk AI Studio 2.3.0 and its Microgateway.
+First release. Needs Tyk AI Studio 2.3.0 and its Microgateway. (1.0.0 was a
+pre-review build and was never listed.)
 
 ### Added
 - Compression of LLM request bodies on the Microgateway (`post_auth`), starting with tool outputs: OpenAI Chat Completions and Responses, Anthropic, Google AI, Vertex, Bedrock Converse and Ollama.
