@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.3.0] - 2026-10-23
+
+Requires AI Studio 2.3.0. Built on the 2.3 Plugin SDK (64 MiB plugin message
+limit).
+
+### Changed
+- **Cache keys are scoped to the LLM.** The exact key now covers the LLM (ID
+  and vendor), the vendor path after the route slug and the model, as well as
+  the prompt. The same prompt sent to two LLMs or two models is cached twice.
+  `/llm/rest/`, `/llm/stream/` and `/llm/call/` share entries for the same LLM
+  and path. Upgrading re-keys every entry, so the cache starts empty.
+- The model, streaming flag and token usage are read with the Plugin SDK
+  helpers, so models named in the request path (Bedrock `/model/{modelId}/`,
+  including escaped ARNs and inference profiles; Gemini `models/{model}:`) and
+  camelCase usage are handled.
+
+### Fixed
+- **Bedrock (Converse).** Different Bedrock models no longer share entries.
+  `inferenceConfig`, `toolConfig`, `additionalModelRequestFields`,
+  `additionalModelResponseFieldPaths`, `guardrailConfig` and `promptVariables`
+  are part of the key and of the semantic partition. Bedrock errors
+  (`{"message": ...}` bodies, `X-Amzn-ErrorType`, anything that is not a
+  Converse answer) are never cached. `converse-stream` requests bypass the
+  cache, so a cached `/converse` answer is never served to a stream. Token
+  savings are counted for Bedrock hits.
+- Tool calls, tool results and non-text content blocks (any vendor) are part
+  of the exact key; prompts that differed only there used to share an entry.
+- The semantic layer skips Converse tool turns and media/document blocks, and
+  reads the temperature from `inferenceConfig`.
+- A streamed response with a non-2xx status is never cached.
+- A hit no longer replays headers that described the request that was
+  stored: the Prompt Compressor's `X-Tyk-Compression*`, the rate limiter's
+  `X-RateLimit-*`, the load balancer's `X-LB-*`, `Server-Timing` and request
+  IDs. Those plugins do not run for a hit, so the headers reported another
+  request's compression, usage and upstream. A vendor's own `X-RateLimit-*`
+  headers (OpenAI's remaining-requests counters, say) describe the original
+  request too and are dropped with them; the vendor's other headers are still
+  replayed.
+
 ## [1.2.2] - 2026-10-14
 
 ### Added

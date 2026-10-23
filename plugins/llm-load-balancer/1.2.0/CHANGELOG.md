@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.2.0] - 2026-10-23
+
+Requires AI Studio 2.3.0. Built on the 2.3 Plugin SDK (64 MiB plugin message
+limit).
+
+### Changed
+- A streamed response with any status outside 2xx, except a client error,
+  counts as a failure for the circuit breaker and the error metrics. Before,
+  only 5xx counted on streams.
+- Client errors (400, 413, 422, and the vendors' invalid-request error types,
+  such as `invalid_request_error` or Bedrock's `ValidationException`) no
+  longer count as failures, on buffered responses or streams. Before, any
+  buffered error body counted, so one app's malformed requests could open the
+  circuit for every app.
+
+### Fixed
+- **An upstream saved without `enabled` is used.** The configuration schema
+  defaults `enabled` to true, but a stored upstream without the field was read
+  as disabled and never selected: every request went to the LLM's own
+  endpoint, and the log blamed health ("no healthy upstreams"). A missing
+  `enabled` now means true; an explicit `false` still disables the upstream.
+  A pool with no enabled upstream logs "no enabled upstream in pool ...".
+- **Bedrock.** AWS errors (`X-Amzn-ErrorType`, `{"message": ...}` and
+  `__type` bodies) count as failures, including the 403 an upstream returns
+  when it rejects the request signature; before, they counted as successes and
+  never opened the circuit. An exception event after a 200 on a Bedrock stream
+  (for example `throttlingException`) counts as a failure.
+- Streaming is detected per vendor with the Plugin SDK helper, so Bedrock
+  `converse-stream` / `invoke-with-response-stream` and Gemini
+  `streamGenerateContent` requests are tracked as streams.
+- Token-aware routing reads content blocks (Anthropic, Bedrock Converse
+  `messages` and `system`, Gemini `contents` and `systemInstruction`) and the
+  vendors' output limits (`max_completion_tokens`, `max_output_tokens`,
+  `inferenceConfig.maxTokens`, `generationConfig.maxOutputTokens`). Before, a
+  request with content blocks was estimated from its raw size.
+- A request whose response hooks never run (answered from post_auth by
+  another plugin such as a cache, or a stream that broke off) now gives its
+  active connection back when its pending entry expires after five minutes.
+  Before, it held the upstream's count up for good, skewing least-connections
+  routing and concurrency limits.
+
 ## [1.1.1] - 2026-10-14
 
 ### Fixed

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.3] - 2026-10-23
+
+Requires AI Studio 2.3.0. Built on the 2.3 Plugin SDK (64 MiB plugin message
+limit). No change in behaviour otherwise.
+
+### Fixed
+- Requests over 4 MiB are authenticated. The gateway sends an auth plugin the
+  request body, and plugins built on an older SDK refuse messages over 4 MiB,
+  so with 1.3.2 the gateway answered 413 for every OAuth2-authenticated
+  request larger than that (a long context, a few images, a PDF).
+
 ## [1.3.2] - 2026-10-14
 
 ### Fixed
