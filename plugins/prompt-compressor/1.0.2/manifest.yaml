@@ -13,8 +13,8 @@ oci:
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
-category: ""
-keywords: []
+category: "traffic-management"
+keywords: ["compression", "cost-reduction", "prompt-caching", "tokens", "agents", "tool-outputs"]
 maturity: "beta"
 
 # Documentation & Support
@@ -46,13 +46,13 @@ capabilities:
 # Requirements & Compatibility
 requirements:
   min_studio_version: "2.3.0"
-  api_versions: []
+  api_versions: ["gateway-v1", "ui-v1"]
   dependencies: []
 
 # Security & Permissions
 permissions:
   services: ["kv.readwrite", "control.send", "pricing.read", "apps.read", "llms.read"]
-  kv: []
+  kv: ["read", "write"]
   rpc: ["call"]
   ui: ["sidebar.register", "route.register"]
 

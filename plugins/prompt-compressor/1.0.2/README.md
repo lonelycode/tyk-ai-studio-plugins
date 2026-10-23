@@ -11,8 +11,8 @@ Microgateway before they reach the vendor, starting with tool outputs.
 
 > **Status:** levels 1 to 3 and the external engines on the Microgateway in
 > `audit` and `enforce` modes, with savings records, the dashboard, the
-> Policies page and the preview tool in Studio. User docs:
-> `docs/site/docs/prompt-compressor.md` in the AI Studio repo.
+> Policies page and the preview tool in Studio. The Prompt
+> Compressor page in the Tyk AI Studio documentation covers setup and tuning.
 
 ## Hooks
 
@@ -39,22 +39,16 @@ Before 2.3 those called AWS directly.
 
 On every hop, `post_auth` runs before the LLM's request filters, so the
 filters screen the compressed body (hence `lossy_with_request_filters`).
-A core `pre_upstream` hook, which would run compression after the filters,
-is still a separate change.
 
 A Bedrock request names its model in the path (`/model/{modelId}/`), not in
-the body. The plugin reads it from there with `plugin_sdk.RequestModel`, so
-ARN and inference-profile IDs come back unescaped and whole, and the
-savings of Bedrock requests are priced.
+the body. The plugin reads it from there, so ARN and inference-profile IDs
+come back unescaped and whole, and the savings of Bedrock requests are
+priced. Native Bedrock streams (`converse-stream`) are labelled and recorded
+like every other stream.
 
-Native Bedrock streams (`converse-stream`) are labelled and recorded from
-the AI Studio build that runs response hooks on them (eac.83). Before it,
-they are compressed but carry no `X-Tyk-Compression` headers and no record.
-
-A cache hit from Advanced LLM Cache attached before the compressor skips
-compression and is not recorded, but it replays the stored response's
-`X-Tyk-Compression-*` headers. The Phase 1 end-to-end run that checked all of
-this is in `e2e/` (`e2e/phase1.sh`, results in `e2e/runs/`).
+A cache hit from a cache plugin attached before the compressor skips
+compression and is not recorded. LLM Cache 1.3.0 and Advanced LLM Cache
+1.3.0 do not replay the compressor's `X-Tyk-Compression*` headers on hits.
 
 The request format comes from the LLM's vendor, the path and the LLM's
 endpoint (`pkg/requestformat`); the plugin reads the endpoint with `llms.read`
@@ -279,17 +273,16 @@ plugin loading. The full schema is in `config.schema.json`.
   built-in tools) are left as sent by default. A policy with
   `compress_server_tool_results` compresses some of them like the client's
   own: Anthropic web search, web fetch and (bash) code execution results,
-  and Responses file search and code interpreter results. A live check
-  (eac.56) found that both vendors accept these edited in history and that
-  the model reads the edited text, also with OpenAI's encrypted reasoning
-  replayed. MCP connector results, the older code execution and text
-  editor results and Google's code execution results were not checked and
-  are always left as sent. Level 3 never masks a vendor's result (the check
-  covered edited results, not removed ones). With an engine policy, the
+  and Responses file search and code interpreter results. Both vendors were
+  checked to accept these edited in history, and the model reads the edited
+  text, also with OpenAI's encrypted reasoning replayed. MCP connector
+  results, the older code execution and text editor results and Google's
+  code execution results were not checked and are always left as sent.
+  Level 3 never masks a vendor's result. With an engine policy, the
   selected vendor results go to the engine like the client's own tool
-  output. Thinking blocks, signatures and tool call ids
-  are never rewritten. The model's own text is rewritten only when a
-  policy's `roles` includes `assistant`.
+  output. Thinking blocks, signatures and tool call ids are never
+  rewritten. The model's own text is rewritten only when a policy's
+  `roles` includes `assistant`.
 
 A reducer's cut leaves an inline marker, in a fixed format:
 
@@ -392,24 +385,3 @@ next flush.
 | `pricing.read` | Model prices, including the cache-read price, to cost the savings |
 | `apps.read` | The per-App policy override in App metadata; the App picker. Without it nothing sent through an App is compressed |
 | `llms.read` | The LLM picker on the Policies page; the LLM's endpoint, which decides the request format |
-
-## Building
-
-```bash
-cd community/plugins/prompt-compressor
-go build -o prompt-compressor
-make test   # go vet and go test -race
-```
-
-## Registering on the dev stack
-
-1. Start the full stack from the AI Studio repo root: `make dev-full`. The
-   plugin watcher builds every plugin module into `/app/bin/plugins/`.
-2. Open the Admin UI at http://localhost:3000 and go to Admin > Plugins >
-   Register Plugin.
-3. Use the command `file:///app/bin/plugins/prompt-compressor` and approve the
-   requested scopes.
-4. Attach the plugin to an LLM, so the Microgateway loads it.
-
-The watcher rebuilds the plugin when a `.go` file changes. Reload it with
-`curl -X POST http://localhost:8080/api/v1/plugins/{id}/reload`.
