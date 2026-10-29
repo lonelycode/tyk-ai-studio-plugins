@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.1] - 2026-10-29
+
+Requires AI Studio 2.3.0.
+
+### Fixed
+- **Pools saved from the plugin's pages load on edges and after a reload.**
+  The Upstream Pools and Settings pages, and the configuration form, store
+  the configuration as top-level keys (`upstream_pools`, `circuit_breaker`,
+  ...), but the plugin only read a JSON string under `config` when it
+  started. The pools only lived in the Studio process that received the
+  save: edges and a reloaded plugin started with no pools, and every request
+  went to the LLM's own endpoint. The plugin now reads the top-level keys; a
+  configuration stored under `config` still loads, and top-level keys win
+  over it.
+- **`X-LB-Upstream` and `X-LB-Pool` reach streamed and bridged responses.**
+  They were only set on a buffered response's body, so streams, and `/ai` and
+  `/v1` calls to non-Bedrock LLMs (whose inner call streams), never carried
+  them. They are now also set with the response headers. `X-LB-Latency-Ms`
+  still measures a whole buffered response, so it is still only on buffered
+  responses that are buffered end to end (`/llm/` calls, Bedrock bridges).
+
 ## [1.2.0] - 2026-10-23
 
 Requires AI Studio 2.3.0. Built on the 2.3 Plugin SDK (64 MiB plugin message

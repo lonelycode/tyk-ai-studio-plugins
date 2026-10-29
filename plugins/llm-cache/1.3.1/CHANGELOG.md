@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.1] - 2026-10-29
+
+Requires AI Studio 2.3.0.
+
+### Fixed
+- **`X-Cache-Status: MISS` (and `BYPASS`) reach streamed and bridged
+  responses.** The status of a request that went upstream was only set on a
+  buffered response's body, so streams, and `/ai` and `/v1` calls to
+  non-Bedrock LLMs (whose inner call streams), never carried it. It is now
+  also set with the response headers. `X-Cache-Key` on a miss is still only
+  on responses buffered end to end, where the answer is stored.
+
 ## [1.3.0] - 2026-10-23
 
 Requires AI Studio 2.3.0. Built on the 2.3 Plugin SDK (64 MiB plugin message
