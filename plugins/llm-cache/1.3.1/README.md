@@ -1,0 +1,166 @@
+# LLM Response Cache Plugin
+
+A community plugin for Tyk AI Studio that caches LLM responses to reduce costs and latency.
+
+## Features
+
+- **Deterministic Cache Keys**: SHA-256 hashed keys over the LLM, its API and the whole request
+- **Prompt Normalization**: Normalizes whitespace and JSON ordering to improve cache hit rates
+- **Namespace Isolation**: Isolates cache entries by API key, app ID, or organization ID
+- **LRU Eviction**: Automatically evicts least recently used entries when cache is full
+- **TTL Expiration**: Configurable time-to-live for cached responses
+- **Bypass Support**: Skip caching via header (`X-Cache: bypass`) or query param (`?cache=bypass`)
+- **Admin Dashboard**: Real-time metrics and cache management via the admin UI
+
+## How It Works
+
+1. **Request Phase (PostAuth)**
+   - Generate deterministic cache key from request content
+   - Check in-memory cache for existing response
+   - On HIT: Return cached response immediately (blocks upstream call)
+   - On MISS: Store cache key for response phase
+
+2. **Response Phase (OnBeforeWrite / OnStreamComplete)**
+   - Retrieve pending cache operation by request ID
+   - Store the LLM's JSON response in cache with TTL; a streamed response is
+     rebuilt into JSON first
+   - Add cache status headers to response
+
+3. **Replay**
+   - A JSON request gets the stored JSON; a streaming request gets it converted
+     into the vendor's own stream (OpenAI, Anthropic and Gemini formats)
+   - Headers describing the body (`Content-Type`, `Content-Length`) are set for
+     what is actually sent, never copied from the stored response
+   - Only plain-text answers in a single choice are converted between JSON and
+     a stream. Tool calls, thinking blocks and multiple choices are replayed
+     only in the form they were stored in; otherwise the request goes upstream
+   - Vendors whose streams the cache cannot produce (for example Ollama's
+     NDJSON) are only served JSON from the cache; their streaming requests go
+     upstream uncached
+
+## Cache Key Components
+
+The cache key is generated from:
+- **Namespace**: API key hash, app ID, or org ID (configurable)
+- **LLM**: the LLM's ID and vendor. Two LLMs never share an entry, even with
+  the same model name and messages
+- **API**: the vendor API path (for example `/v1/messages`,
+  `/v1/chat/completions` or Gemini's `models/{model}:generateContent`, which
+  also names the model)
+- **Request**: every field of the request body (messages or Gemini `contents`,
+  system prompt, tools and tool results, temperature, `max_tokens`,
+  `response_format`, `n`, stop sequences and so on), except `stream` and
+  `stream_options`, which only choose how the answer is delivered
+
+With `normalize_prompts`, prompt text is compared with its whitespace
+collapsed and tool definitions regardless of their order.
+
+Requests reach the cache on the gateway's `/llm/` endpoints in the LLM's
+native API. That includes Studio's OpenAI-compatible endpoints (`/ai/{slug}/v1`
+and the unified `/v1` router), whose drivers call `/llm/call/{slug}/` in the
+native API and stream from it.
+
+### Bedrock
+
+Bedrock Converse answers are cached like any other JSON answer. The model is in
+the `/model/{modelId}/` path, which is part of the key, so two Bedrock models
+never share an entry. Since 1.3.0:
+
+- AWS errors are never cached: a response with `X-Amzn-ErrorType`, or a
+  `{"message": ...}` or `__type` body.
+- Tokens saved are counted from Converse's camelCase usage (`inputTokens`,
+  `outputTokens`), read with the Plugin SDK's `ResponseUsage`, as for every
+  other vendor.
+- `converse-stream` and `invoke-with-response-stream` requests go upstream
+  uncached: the cache cannot replay an AWS event stream.
+
+A streamed response whose status is not 2xx is never cached, for any vendor.
+
+## Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `enabled` | boolean | `true` | Enable/disable the cache |
+| `ttl_seconds` | integer | `3600` | Time-to-live for cached responses (60-86400) |
+| `max_entry_size_kb` | integer | `2048` | Maximum size of a single cache entry |
+| `max_cache_size_mb` | integer | `256` | Maximum total cache size before LRU eviction |
+| `namespaces` | array | `["api_key"]` | Fields for cache isolation (`api_key`, `app_id`, `org_id`) |
+| `normalize_prompts` | boolean | `true` | Normalize whitespace and JSON ordering |
+| `expose_cache_key_header` | boolean | `false` | Include `X-Cache-Key` in responses |
+
+## Response Headers
+
+| Header | Description |
+|--------|-------------|
+| `X-Cache-Status` | `HIT`, `MISS`, or `BYPASS` |
+| `X-Cache-Key` | Cache key hash (if `expose_cache_key_header` enabled) |
+| `X-Cache-Age` | Seconds since entry was cached (on HIT) |
+| `X-Cache-TTL` | Seconds until entry expires (on HIT) |
+
+## Bypass Cache
+
+To bypass the cache for a specific request:
+
+```bash
+# Via header
+curl -H "X-Cache: bypass" ...
+
+# Via query parameter
+curl "https://api.example.com/v1/chat?cache=bypass" ...
+```
+
+## Plugin Order
+
+The cache runs in `post_auth`, in the order of the LLM's plugin list. A hit answers there. Later `post_auth` plugins and request filters do not run for it, and no plugin's response hooks run. Recommended order: LLM Firewall (when it runs in `post_auth`), this cache, Rate Limiter, Prompt Compressor, LLM Load Balancer.
+
+- **Put the cache before the Prompt Compressor.** Keys then come from the client's body, so changing a compression policy does not empty the cache. Hits never reach the compressor and are not in its savings. With the compressor first, keys come from the compressed body: identical requests under one policy still hit, but each policy change starts the cache again.
+- **An entry stored while compression was enforcing holds the model's answer to the compressed prompt.** It is served for the same client body until it expires, including to a client that sent `X-Tyk-Compression: off`, which bypasses compression, not the cache. To get a fresh, uncompressed answer, send `X-Cache: bypass` as well.
+- **Cache hits are not rate limited** when the cache comes before the Rate Limiter.
+- An entry does not keep the response headers other plugins set about the original request (`X-Tyk-Compression*`, `X-RateLimit-*`, `X-LB-*`, `Server-Timing`), because those plugins do not run for a hit. Before 1.3.0 a hit replayed them.
+- Microgateway edges managed by AI Studio follow the order set on the LLM from AI Studio 2.3. Older edges run an LLM's plugins in the order the plugins were installed.
+
+## Building
+
+```bash
+cd community/plugins/llm-cache
+go build -o llm-cache .
+```
+
+## Installation
+
+1. Build the plugin binary
+2. Configure the plugin in AI Studio
+3. Access the dashboard at `/admin/llm-cache/dashboard`
+
+## Metrics
+
+The admin dashboard displays:
+- **Hit Rate**: Percentage of requests served from cache
+- **Cache Hits/Misses**: Total counts
+- **Bypass Count**: Requests that bypassed the cache
+- **Tokens Saved**: Estimated tokens saved by cache hits
+- **Active Entries**: Current number of cached responses
+- **Cache Size**: Current memory usage and capacity
+- **Eviction Count**: Number of entries evicted due to size limits
+
+**Clear Cache** in the dashboard clears every edge and lists the edges that acknowledged it. Each edge reports itself by its `EDGE_ID` environment variable. An edge without one reports a random ID (`edge-<uuid>`) that stays the same until the plugin restarts.
+
+The plugin writes no files. It logs through the host's plugin logger, and per-request and per-event detail is logged at debug level.
+
+## Limitations
+
+- **In-memory only**: Cache is not persisted across restarts
+- **Single instance**: Cache is not shared between gateway instances
+- **Streaming**: Streamed answers with tool calls or thinking blocks are not cached
+
+## Future Enhancements (Enterprise)
+
+- Redis/distributed cache backend
+- Streaming response re-injection
+- Per-route TTL configuration
+- Cache warming/preloading
+- Analytics and cost tracking
+
+## License
+
+This plugin is part of the Tyk AI Studio community plugins.
