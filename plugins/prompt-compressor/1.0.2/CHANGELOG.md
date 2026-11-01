@@ -20,6 +20,10 @@ Requires AI Studio 2.3.0.
 - **Documentation:** the coverage table now lists `/ai/`, `/v1`, `/router/`
   and `/anthropic/` to Bedrock as covered from AI Studio 2.3, where the plugin
   runs on the gateway's internal `/llm/call/` hop on the Converse body.
+- **All three admin pages load in any order.** Opening a second Prompt
+  Compressor page (Dashboard, Policies, Preview) in the same session failed
+  with "Web Component … was not registered after executing JavaScript". Each
+  page now loads on its own.
 
 ## [1.0.1] - 2026-10-21
 

@@ -9,7 +9,7 @@ oci:
   registry: "docker.tyk.io"
   repository: "studio-plugins/prompt-compressor"
   tag: "1.0.2"
-  digest: "sha256:5776b088b344a90eaf2b1ddf7d571c966115215c6bc882a3290591b0c4f6b8a8"
+  digest: "sha256:b9f5160945d9424ae6ab7f819e51d3426afeb317d60bdf056a933f4a63dd2084"
   platform: ["linux/amd64", "darwin/arm64"]
 
 # Discovery & Classification
@@ -69,7 +69,7 @@ enterprise_only: false
 
 # Metadata
 created_at: "2026-10-23T06:32:05Z"
-updated_at: "2026-10-23T06:32:05Z"
+updated_at: "2026-11-01T21:46:58Z"
 deprecated: false
 deprecated_message: ""
 replacement: ""
