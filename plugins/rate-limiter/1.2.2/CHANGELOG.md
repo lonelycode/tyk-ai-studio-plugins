@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.2.2] - 2026-11-23
+
+Requires AI Studio 2.3.0.
+
+### Fixed
+- **Rate limit headers reach the client, not the vendor.** On an allowed
+  request `X-RateLimit-Limit`, `X-RateLimit-Remaining` and
+  `X-RateLimit-Reset` (and `X-RateLimit-Shadow-Breach` and
+  `X-RateLimit-Error`) were returned from the post-auth hook, which sets
+  them on the request the gateway sends to the vendor: the vendor saw the
+  customer's limits, and the client saw the headers only on a `429`. They
+  are now added to the response, buffered and streamed, and nothing is added
+  to the upstream request. The vendor's own rate limit headers (such as
+  OpenAI's `X-Ratelimit-Limit-Requests`) are passed on unchanged.
+- **`X-RateLimit-Remaining` counts the request it is returned on.** With a
+  limit of N the first allowed response says N-1 and the last says 0, which
+  agrees with the `429` that follows. It was one too high. For a token rule
+  it is what was left before the response, whose tokens are not known when
+  the headers are sent.
+
+- **Rules survive a change of storage backend.** The rules were kept in the
+  counter store, so after switching `storage_backend` from `kv` to `redis`
+  (or back) the Rules page showed none and editing a rule failed with "rule
+  not found", while gateways kept enforcing the old rules; the next rule
+  created on the page then replaced them all, and gateways lost the others
+  after the next push. The rules are now kept in the plugin's own storage in
+  AI Studio whatever the backend is. When the plugin starts it makes that
+  storage and the plugin configuration agree: the configuration's rules, the
+  ones gateways enforce, are what the page shows, a configuration saved
+  without its rules gets them back, and rules that a 1.2.x plugin kept in
+  Redis are moved. A rule write always writes the whole rule set.
+
+The headers of a request wait in memory for its response. A request that
+never gets one (the client went away, another plugin answered it) has them
+dropped after ten minutes, and at most 100,000 requests are held at a time.
+
 ## [1.2.1] - 2026-10-29
 
 Requires AI Studio 2.3.0.

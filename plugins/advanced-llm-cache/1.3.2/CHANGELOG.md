@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.3.2] - 2026-11-23
+
+Requires AI Studio 2.3.0.
+
+### Fixed
+- **A Redis backend that cannot be used is no longer a silent fallback.**
+  With Redis configured and not reachable (a wrong password, a `$SECRET/`
+  reference in `backend.redis.password`, an untrusted TLS certificate, TLS on
+  one end only), the plugin served from a per-process memory cache and health
+  said `memory, healthy`. It still serves from memory, so requests keep
+  working, and now says so:
+  - `getBackendHealth` and the Health page report `degraded` (`healthy:
+    false`) with the configured and the active backend and a reason that
+    tells the causes apart; the scheduled health check records it;
+  - the Configuration page shows "In use: memory (fallback from redis)" and
+    the reason;
+  - edges report their own fallback with their statistics, and the Cache
+    Dashboard lists the edges that are in it;
+  - one warning is logged when the fallback starts or its reason changes, at
+    warning level in the host's log, and one line when it ends.
+  No password or URL credentials appear in any of these.
+- **The plugin goes back to Redis by itself.** While in fallback it tries the
+  configured backend again every 30 seconds and switches when it answers.
+  Before, only a restart or a configuration change did.
+
+### Changed
+- The Redis password field (form and schema) says that a `$SECRET/` or
+  `$ENV/` reference is not resolved there.
+
 ## [1.3.1] - 2026-10-29
 
 Requires AI Studio 2.3.0.
